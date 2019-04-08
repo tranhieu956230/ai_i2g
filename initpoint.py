@@ -562,7 +562,7 @@ def init_fluvial_floodplain(data_set):
         if 1 <= u_thick < 30:
             return 5
 
-    if data_set["Lithofacies_major"] == "4":
+    if data_set["Lithofacies_major"] == "4" and data_set["GR_shape_code"] == "5":
         u_thick = float(data_set["Unit_Thick"])
         if 1 <= u_thick < 30:
             return 5
@@ -579,7 +579,7 @@ def init_lagoon(data_set):
         u_thick = float(data_set["Unit_Thick"])
         if 1 <= u_thick < 30:
             return 4
-    if data_set["Lithofacies_major"] == "4":
+    if data_set["Lithofacies_major"] == "4" and data_set["GR_shape_code"] == "5":
         u_thick = float(data_set["Unit_Thick"])
         if 1 <= u_thick < 30:
             return 4
@@ -598,7 +598,7 @@ def init_lacustrine_shelf(data_set):
         if 1 <= u_thick < 30:
             return 5
 
-    if data_set["Lithofacies_major"] == "4":
+    if data_set["Lithofacies_major"] == "4" and data_set["GR_shape_code"] == "5":
         u_thick = float(data_set["Unit_Thick"])
         if 1 <= u_thick < 30:
             return 5
@@ -617,7 +617,7 @@ def init_marine_shelf(data_set):
         if 1 <= u_thick < 30:
             return 5
 
-    if data_set["Lithofacies_major"] == "4":
+    if data_set["Lithofacies_major"] == "4" and data_set["GR_shape_code"] == "5":
         u_thick = float(data_set["Unit_Thick"])
         if 1 <= u_thick < 30:
             return 5
@@ -663,7 +663,7 @@ def init_mixed_tidal_flat(data_set):
 
 
 def init_muddy_tidal_flat(data_set):
-    if data_set["Lithofacies_major"] == "4":
+    if data_set["Lithofacies_major"] == "4" and data_set["GR_shape_code"] == "5":
         u_thick = float(data_set["Unit_Thick"])
         if 1 <= u_thick < 5:
             return 4
@@ -671,7 +671,7 @@ def init_muddy_tidal_flat(data_set):
 
 
 def init_lacustrine_deepwater(data_set):
-    if data_set["Lithofacies_major"] == "4":
+    if data_set["Lithofacies_major"] == "4" and data_set["GR_shape_code"] == "5":
         u_thick = float(data_set["Unit_Thick"])
         if 1 <= u_thick < 30:
             return 5
@@ -679,7 +679,7 @@ def init_lacustrine_deepwater(data_set):
 
 
 def init_marine_deepwater(data_set):
-    if data_set["Lithofacies_major"] == "4":
+    if data_set["Lithofacies_major"] == "4" and data_set["GR_shape_code"] == "5":
         u_thick = float(data_set["Unit_Thick"])
         if 1 <= u_thick < 30:
             return 5
