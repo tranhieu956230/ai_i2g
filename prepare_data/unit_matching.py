@@ -19,7 +19,7 @@ n_samples = gr.shape[0]
 unit_index = np.zeros(n_samples).astype(np.int32)
 sequence_number = 0
 idx_set = []
-for i in range (n_samples):
+for i in range(n_samples):
     idx_set.append(i)
     if boundary_flag[i] != 0 or i == n_samples - 1:
         unit_index[idx_set] = sequence_number
@@ -71,9 +71,9 @@ def compute_rate_of_change(arr):
     n_samples = arr.shape[0]
     avg_first = np.average(arr[:2])
     avg_last = np.average(arr[-2:])
-    base_line = np.linspace(avg_first, avg_last, n_samples, endpoint = True)
+    base_line = np.linspace(avg_first, avg_last, n_samples, endpoint=True)
     difference = (arr - base_line)
-#    count = ((difference[:-1] * difference[1:]) < 0).sum()
+    #    count = ((difference[:-1] * difference[1:]) < 0).sum()
     upward = True
     count = 0
     i = 0
@@ -81,21 +81,24 @@ def compute_rate_of_change(arr):
         i += 1
     if difference[i] < 0 and i < n_samples:
         upward = False
-    for j in range (i + 1, n_samples):
+    for j in range(i + 1, n_samples):
         if (upward and difference[j] < 0) or ((not upward) and difference[j] > 0):
             count += 1
             upward = not upward
     return count / n_samples
 
+
 def compute_slope(arr):
     return (np.average(arr[:2]) - np.average(arr[-2:])) / arr.shape[0]
+
 
 def compute_variance_base_on_slope_line(arr):
     n_samples = arr.shape[0]
     avg_first = np.average(arr[:2])
     avg_last = np.average(arr[-2:])
-    base_line = np.linspace(avg_first, avg_last, n_samples, endpoint = True)
+    base_line = np.linspace(avg_first, avg_last, n_samples, endpoint=True)
     return np.mean((arr - base_line) ** 2)
+
 
 # Statistical measures
 idx_set = []
@@ -107,7 +110,7 @@ mean_unit = np.zeros(n_samples)
 variance_1 = np.zeros(n_samples)
 variance_2 = np.zeros(n_samples)
 
-for i in range (0, n_samples):
+for i in range(0, n_samples):
     idx_set.append(i)
     if boundary_flag[i] == 1 or i == n_samples - 1:
         gr_set = gr[idx_set].copy()
@@ -130,7 +133,6 @@ rms_threshold = 6
 weights = {'zcr': 1, 'slope': 5, 'mean': 1, 'variance1': 1, 'variance2': 2, 'rms': 3}
 score_threshold = 10
 
-
 n_samples = gr.shape[0]
 idx_set = []
 number_of_similar_pattern50 = np.zeros(n_samples)
@@ -138,35 +140,37 @@ number_of_similar_pattern100 = np.zeros(n_samples)
 similar_unit_list50 = []
 similar_unit_list100 = []
 
-for i in range (n_samples):
+for i in range(n_samples):
     idx_set.append(i)
     if boundary_flag[i] != 0 or i == n_samples - 1:
         sub_idx_set = []
         similar_unit_index = []
-        for j in range (i + 1, n_samples):
+        for j in range(i + 1, n_samples):
             sub_idx_set.append(j)
             if boundary_flag[j] != 0 or j == n_samples - 1:
                 current_unit_id = idx_set[0]
                 comparison_unit_id = sub_idx_set[0]
                 if abs(tvd[comparison_unit_id] - tvd[current_unit_id]) <= 50:
-                    if lithofacies[current_unit_id] == lithofacies[comparison_unit_id] and gr_shape_code[current_unit_id] == gr_shape_code[comparison_unit_id]:
-                        if thickness[current_unit_id] * 0.5 < thickness[comparison_unit_id] < thickness[current_unit_id] * 1.5:
+                    if lithofacies[current_unit_id] == lithofacies[comparison_unit_id] and gr_shape_code[
+                        current_unit_id] == gr_shape_code[comparison_unit_id]:
+                        if thickness[current_unit_id] * 0.5 < thickness[comparison_unit_id] < thickness[
+                            current_unit_id] * 1.5:
                             score = 0
                             n_current_unit_samples = len(idx_set)
                             n_comparision_unit_samples = len(sub_idx_set)
                             current_unit_resamples = np.array(
-                                                        [gr[idx_set[0]],
-                                                         gr[idx_set[int(n_current_unit_samples * 0.25)]],
-                                                         gr[idx_set[int(n_current_unit_samples * 0.5)]],
-                                                         gr[idx_set[int(n_current_unit_samples * 0.75)]],
-                                                         gr[idx_set[-1]]])
+                                [gr[idx_set[0]],
+                                 gr[idx_set[int(n_current_unit_samples * 0.25)]],
+                                 gr[idx_set[int(n_current_unit_samples * 0.5)]],
+                                 gr[idx_set[int(n_current_unit_samples * 0.75)]],
+                                 gr[idx_set[-1]]])
 
                             comparison_unit_resamples = np.array(
-                                                            [gr[sub_idx_set[0]],
-                                                             gr[sub_idx_set[int(n_comparision_unit_samples * 0.25)]],
-                                                             gr[sub_idx_set[int(n_comparision_unit_samples * 0.5)]],
-                                                             gr[sub_idx_set[int(n_comparision_unit_samples * 0.75)]],
-                                                             gr[sub_idx_set[-1]]])
+                                [gr[sub_idx_set[0]],
+                                 gr[sub_idx_set[int(n_comparision_unit_samples * 0.25)]],
+                                 gr[sub_idx_set[int(n_comparision_unit_samples * 0.5)]],
+                                 gr[sub_idx_set[int(n_comparision_unit_samples * 0.75)]],
+                                 gr[sub_idx_set[-1]]])
 
                             rms = np.sqrt(np.mean((current_unit_resamples - comparison_unit_resamples) ** 2))
                             if rms < rms_threshold:
@@ -191,41 +195,42 @@ for i in range (n_samples):
         similar_unit_list50.append(similar_unit_index)
         idx_set = []
 
-for i in range (len(similar_unit_list50)):
-    for j in range (len(similar_unit_list50[i])):
+for i in range(len(similar_unit_list50)):
+    for j in range(len(similar_unit_list50[i])):
         if similar_unit_list50[i][j] > i:
             similar_unit_list50[similar_unit_list50[i][j]].append(i)
 
-
-for i in range (n_samples):
+for i in range(n_samples):
     idx_set.append(i)
     if boundary_flag[i] != 0 or i == n_samples - 1:
         sub_idx_set = []
         similar_unit_index = []
-        for j in range (i + 1, n_samples):
+        for j in range(i + 1, n_samples):
             sub_idx_set.append(j)
             if boundary_flag[j] != 0 or j == n_samples - 1:
                 current_unit_id = idx_set[0]
                 comparison_unit_id = sub_idx_set[0]
                 if 50 < abs(tvd[comparison_unit_id] - tvd[current_unit_id]) <= 100:
-                    if lithofacies[current_unit_id] == lithofacies[comparison_unit_id] and gr_shape_code[current_unit_id] == gr_shape_code[comparison_unit_id]:
-                        if thickness[current_unit_id] * 0.5 < thickness[comparison_unit_id] < thickness[current_unit_id] * 1.5:
+                    if lithofacies[current_unit_id] == lithofacies[comparison_unit_id] and gr_shape_code[
+                        current_unit_id] == gr_shape_code[comparison_unit_id]:
+                        if thickness[current_unit_id] * 0.5 < thickness[comparison_unit_id] < thickness[
+                            current_unit_id] * 1.5:
                             score = 0
                             n_current_unit_samples = len(idx_set)
                             n_comparision_unit_samples = len(sub_idx_set)
                             current_unit_resamples = np.array(
-                                                        [gr[idx_set[0]],
-                                                         gr[idx_set[int(n_current_unit_samples * 0.25)]],
-                                                         gr[idx_set[int(n_current_unit_samples * 0.5)]],
-                                                         gr[idx_set[int(n_current_unit_samples * 0.75)]],
-                                                         gr[idx_set[-1]]])
+                                [gr[idx_set[0]],
+                                 gr[idx_set[int(n_current_unit_samples * 0.25)]],
+                                 gr[idx_set[int(n_current_unit_samples * 0.5)]],
+                                 gr[idx_set[int(n_current_unit_samples * 0.75)]],
+                                 gr[idx_set[-1]]])
 
                             comparison_unit_resamples = np.array(
-                                                            [gr[sub_idx_set[0]],
-                                                             gr[sub_idx_set[int(n_comparision_unit_samples * 0.25)]],
-                                                             gr[sub_idx_set[int(n_comparision_unit_samples * 0.5)]],
-                                                             gr[sub_idx_set[int(n_comparision_unit_samples * 0.75)]],
-                                                             gr[sub_idx_set[-1]]])
+                                [gr[sub_idx_set[0]],
+                                 gr[sub_idx_set[int(n_comparision_unit_samples * 0.25)]],
+                                 gr[sub_idx_set[int(n_comparision_unit_samples * 0.5)]],
+                                 gr[sub_idx_set[int(n_comparision_unit_samples * 0.75)]],
+                                 gr[sub_idx_set[-1]]])
 
                             rms = np.sqrt(np.mean((current_unit_resamples - comparison_unit_resamples) ** 2))
                             if rms < rms_threshold:
@@ -250,8 +255,8 @@ for i in range (n_samples):
         similar_unit_list100.append(similar_unit_index)
         idx_set = []
 
-for i in range (len(similar_unit_list100)):
-    for j in range (len(similar_unit_list100[i])):
+for i in range(len(similar_unit_list100)):
+    for j in range(len(similar_unit_list100[i])):
         if similar_unit_list100[i][j] > i:
             similar_unit_list100[similar_unit_list100[i][j]].append(i)
 
@@ -321,12 +326,12 @@ for i in range (len(similar_unit_list100)):
 dataset['Unit_index'] = unit_index
 dataset['Number_of_similar_units_50'] = number_of_similar_pattern50
 dataset['Index_of_similar_units_50'] = ''
-for i in range (len(similar_unit_list50)):
+for i in range(len(similar_unit_list50)):
     dataset.loc[dataset.Unit_index == i, 'Index_of_similar_units_50'] = str(similar_unit_list50[i])
 
 dataset['Number_of_similar_units_100'] = number_of_similar_pattern100
 dataset['Index_of_similar_units_100'] = ''
-for i in range (len(similar_unit_list100)):
+for i in range(len(similar_unit_list100)):
     dataset.loc[dataset.Unit_index == i, 'Index_of_similar_units_100'] = str(similar_unit_list100[i])
 
 dataset.Boundary_flag = dataset.Boundary_flag.astype(np.int8)
@@ -336,6 +341,8 @@ dataset.Sharp_boundary = dataset.Sharp_boundary.astype(np.int8)
 dataset.dtypes
 dataset = dataset[['Depth', 'GR', 'MUD_VOLUME', 'TVD', 'Boundary_flag', 'Unit_index', 'GR_shape_code',
                    'Lithofacies_major', 'Lithofacies_mean', 'Sharp_boundary', 'Stacking_pattern',
+                   'Biostratigraphy', 'Reliability', 'Special_lithology', 'Core_depofacies',
                    'Number_of_similar_units_50', 'Index_of_similar_units_50', 'Number_of_similar_units_100',
+
                    'Index_of_similar_units_100']]
-dataset.to_csv('data.csv', index = False)
+dataset.to_csv('data.csv', index=False)

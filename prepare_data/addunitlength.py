@@ -16,9 +16,9 @@ with open("data.csv") as csv_file:
         for i in range(len(data) - 1):
             if data[i]["Unit_index"] != data[i+1]["Unit_index"]:
                 unit_length = float(data[i]["TVD"]) - float(data[bound]["TVD"])
-                for j in range(bound + 1 if bound > 0 else 0, i + 1):
-                    data[j].update({"Unit_Thick": unit_length})
-                    writer.writerow(data[j])
+                idx = bound + 1 if bound > 0 else 0
+                data[idx].update({"Unit_Thick": unit_length})
+                writer.writerow(data[idx])
                 bound = i
 
 
