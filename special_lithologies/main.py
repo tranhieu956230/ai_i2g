@@ -63,19 +63,21 @@ def add_point_marine_non_clastic(row):
     for group_name in marines:
         for code in groups[group_name]:
             name = map_core_depofacies_code_to_name(code)
-            row.update({name: int(row[name]) + 2})
+            if int(row[name]) > 0:
+                row.update({name: int(row[name]) + 2})
     return row
 
 
 def add_point_coal(row):
     for code in groups["Fluvial"]:
         name = map_core_depofacies_code_to_name(code)
-        row.update({name: int(row[name]) + 2})
+        if int(row[name]) > 0:
+            row.update({name: int(row[name]) + 2})
 
     for code in groups["Marginal_Marine"]:
         name = map_core_depofacies_code_to_name(code)
-        print(f"{name}: {row[name]}")
-        row.update({name: int(row[name]) + 1})
+        if int(row[name]) > 0:
+            row.update({name: int(row[name]) + 1})
 
     return row
 
