@@ -1,8 +1,11 @@
 from csv import DictReader, DictWriter, reader
 from utilites import utils_func
+from copy import deepcopy
+
 
 def add_point_volcanics(row):
     return row
+
 
 def add_point_marine_non_clastic(row):
     marines = ["Shallow_Marine", "Marginal_Marine", "Deep_Marine"]
@@ -39,35 +42,55 @@ def updateRow(row, litho_code):
     return row
 
 
-def find_unit_special_lithology(unit_index, data):
-    lithologies = []
-    for row in data:
-        if int(row["Unit_index"]) == int(unit_index) and row["Special_lithology"] != '-999':
-            lithologies.append(row["Special_lithology"])
-    return lithologies
-
-
 def find_adjacent_unit_special_lithology(unit_index, data):
-    before = find_unit_special_lithology(int(unit_index) - 1, data)
-    current = find_unit_special_lithology(int(unit_index), data)
-    after = find_unit_special_lithology(int(unit_index) + 1, data)
-    before.extend(current)
-    before.extend(after)
-    return utils_func.removeDuplicate(before)
+    unit_index = int(unit_index)
+    lithologies = data[unit_index]["Special_lithologies"]
+    before = data[unit_index - 1 if unit_index > 0 else 0]["Special_lithologies"]
+    after = data[unit_index + 1 if unit_index < len(data) - 1 else len(data) - 1]["Special_lithologies"]
+    lithologies.extend(before)
+    lithologies.extend(after)
+    return utils_func.remove_duplicate(lithologies)
 
+def simplify_data(data):
+    lst = []
+    lithos = []
+    for i in range(len(data) - 1):
+        if data[i]["Special_lithology"] != "-999":
+            lithos.append(data[i]["Special_lithology"])
+        if data[i]["Unit_index"] != data[i + 1]["Unit_index"]:
+            final_lithologies = deepcopy(utils_func.remove_duplicate(lithos))
+            lst.append({
+                "Unit_index": data[i]["Unit_index"],
+                "Special_lithologies": final_lithologies
+            })
+            lithos.clear()
 
-with open("../similar_unit/similar_unit.csv") as i_file:
+    for i in range(len(data) - 1, -1, -1):
+        if data[i]["Special_lithology"] != "-999":
+            lithos.append(data[i]["Special_lithology"])
+        if data[i]["Unit_index"] != data[i - 1]["Unit_index"]:
+            final_lithologies = deepcopy(utils_func.remove_duplicate(lithos))
+            lst.append({
+                "Unit_index": data[i]["Unit_index"],
+                "Special_lithologies": final_lithologies
+            })
+            lithos.clear()
+            break
+
+    return lst
+
+with open("../similar_unit_3/similar_unit.csv") as i_file:
     csv_reader = reader(i_file)
     headers = list(csv_reader)[0]
 
-with open("../similar_unit/similar_unit.csv") as i_file:
+with open("../similar_unit_3/similar_unit.csv") as i_file:
     dict_reader = DictReader(i_file)
     data = list(dict_reader)
+    simplifed_unit = simplify_data(data)
     for i in range(len(data)):
-        lithologies = find_adjacent_unit_special_lithology(data[i]["Unit_index"], data)
+        lithologies = find_adjacent_unit_special_lithology(data[i]["Unit_index"], simplifed_unit)
         if len(lithologies) > 0:
             for lithology in lithologies:
-                print(lithology)
                 data[i].update(updateRow(data[i], lithology))
 
 with open("special_lithology.csv", "w") as o_file:

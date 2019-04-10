@@ -1,4 +1,4 @@
-def removeDuplicate(arr):
+def remove_duplicate(arr):
     arr.sort()
     i = 0
     while i < len(arr) - 1:
@@ -32,7 +32,7 @@ def map_core_depofacies_code_to_name(code):
             "3.5": "Lacustrine_Deepwater",
             "4.1": "Marine_Delta",
             "4.2": "Marine_Fan_Delta",
-            "4.3": "Tidal_Channel_and_Sand_Flat",
+            "4.3": "Tidal_Channel_And_Sand_Flat",
             "4.4": "Sandy_Tidal_Flat",
             "4.5": "Mixed_Tidal_Flat",
             "4.6": "Muddy_Tidal_Flat",

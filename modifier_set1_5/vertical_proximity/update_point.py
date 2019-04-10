@@ -151,7 +151,7 @@ def update_marine_fan_delta(data_set):
 
 
 def update_tidal_channel_and_sand_flat(data_set):
-    if data_set["Tidal_Channel_and_Sand_Flat"] == "0":
+    if data_set["Tidal_Channel_And_Sand_Flat"] == "0":
         return 0
     points = [-1, 1, 2, 3]
     return points[get_idx(data_set["Number_of_similar_units_50"])]

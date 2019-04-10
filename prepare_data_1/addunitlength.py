@@ -1,5 +1,5 @@
 from csv import DictReader, DictWriter, reader
-from prepare_data import unit_matching
+from prepare_data_1 import unit_matching
 
 with open("data.csv") as csv_file:
     csv_reader = list(reader(csv_file))
@@ -8,7 +8,7 @@ with open("data.csv") as csv_file:
 with open("data.csv") as csv_file:
     dict_writer = DictReader(csv_file)
     data = list(dict_writer)
-    with open("prepared_data.csv", "w") as write_file:
+    with open("prepare_data.csv", "w") as write_file:
         headers.extend(["Unit_Thick"])
         writer = DictWriter(write_file, fieldnames=headers)
         writer.writeheader()

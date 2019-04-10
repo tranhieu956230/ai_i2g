@@ -1,4 +1,4 @@
-from initial_point import initpoint
+from initial_point_2 import initpoint
 
 from csv import DictReader, DictWriter, reader
 
@@ -23,7 +23,7 @@ additional = [
     "Lacustrine_Deepwater",
     "Marine_Delta",
     "Marine_Fan_Delta",
-    "Tidal_Channel_and_Sand_Flat",
+    "Tidal_Channel_And_Sand_Flat",
     "Sandy_Tidal_Flat",
     "Mixed_Tidal_Flat",
     "Muddy_Tidal_Flat",
@@ -40,11 +40,11 @@ additional = [
     "Marine_Deepwater"
 ]
 
-with open("../prepare_data/prepared_data.csv") as csv_file:
+with open("../prepare_data_1/prepare_data.csv") as csv_file:
     csv_reader = list(reader(csv_file))
     headers = csv_reader[0]
 
-with open("../prepare_data/prepared_data.csv") as csv_file:
+with open("../prepare_data_1/prepare_data.csv") as csv_file:
     data = DictReader(csv_file)
     with open("init_point.csv", "w") as write_file:
         headers.extend(additional)
@@ -73,7 +73,7 @@ with open("../prepare_data/prepared_data.csv") as csv_file:
                 "Lacustrine_Deepwater": initpoint.init_lacustrine_deepwater(row),
                 "Marine_Delta": initpoint.init_marine_delta(row),
                 "Marine_Fan_Delta": initpoint.init_marine_fan_delta(row),
-                "Tidal_Channel_and_Sand_Flat": initpoint.init_tidal_channel_and_sand_flat(row),
+                "Tidal_Channel_And_Sand_Flat": initpoint.init_tidal_channel_and_sand_flat(row),
                 "Sandy_Tidal_Flat": initpoint.init_sandy_tidal_flat(row),
                 "Mixed_Tidal_Flat": initpoint.init_mixed_tidal_flat(row),
                 "Muddy_Tidal_Flat": initpoint.init_muddy_tidal_flat(row),

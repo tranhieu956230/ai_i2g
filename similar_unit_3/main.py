@@ -1,12 +1,14 @@
 from csv import DictReader, DictWriter, reader
 from utilites import utils_func
 
+
 def find_unit_core_depofacies(unit_index, data_list):
     depofacies = []
     for row in data_list:
         if row["Unit_index"] in unit_index:
             depofacies.append(row["Core_depofacies"])
-    return utils_func.removeDuplicate(depofacies)
+    return utils_func.remove_duplicate(depofacies)
+
 
 def handle_point(current_point, radius):
     current_point = int(current_point)
@@ -19,11 +21,11 @@ def handle_point(current_point, radius):
     return current_point
 
 
-with open("../initial_point/init_point.csv") as file:
+with open("../initial_point_2/init_point.csv") as file:
     csv_reader = reader(file)
     headers = list(csv_reader)[0]
 
-with open("../initial_point/init_point.csv") as file:
+with open("../initial_point_2/init_point.csv") as file:
     dict_reader = DictReader(file)
     data = list(dict_reader)
     for i in range(len(data)):
@@ -48,7 +50,6 @@ with open("../initial_point/init_point.csv") as file:
                     new_point = handle_point(data[i][name], "50-100")
                     print(new_point)
                     data[i].update({name: new_point})
-
 
 with open("similar_unit.csv", "w") as new_file:
     dict_writer = DictWriter(new_file, fieldnames=headers)
