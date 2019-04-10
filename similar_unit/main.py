@@ -2,11 +2,15 @@ from csv import DictReader, DictWriter, reader
 
 
 def find_unit_core_depofacies(unit_index, data_list):
-    return data_list[int(unit_index)]["Core_depofacies"]
+    depofacies = []
+    for row in data_list:
+        if row["Unit_index"] in unit_index:
+            depofacies.append(row["Core_depofacies"])
+    return removeDuplicate(depofacies)
 
 
 def convert_string_to_array(string):
-    return string[1:-1].split(", ")
+    return string[1:-1].split(", ") if string != '[]' else []
 
 
 def map_core_depofacies_code_to_name(code):
@@ -64,6 +68,17 @@ def handle_point(current_point, radius):
     return current_point
 
 
+def removeDuplicate(arr):
+    arr.sort()
+    i = 0
+    while i < len(arr) - 1:
+        if arr[i] == arr[i + 1]:
+            arr.pop(i)
+            i -= 1
+        i += 1
+    return arr
+
+
 with open("../initial_point/init_point.csv") as file:
     csv_reader = reader(file)
     headers = list(csv_reader)[0]
@@ -72,22 +87,26 @@ with open("../initial_point/init_point.csv") as file:
     dict_reader = DictReader(file)
     data = list(dict_reader)
     for i in range(len(data)):
-        if int(data[i]["Number_of_similar_units_50"]) > 0:
-            for unit_index in convert_string_to_array(data[i]["Index_of_similar_units_50"]):
-                code = find_unit_core_depofacies(unit_index, data)
+        if map_core_depofacies_code_to_name(data[i]["Core_depofacies"]):
+            unit_index = convert_string_to_array(data[i]["Index_of_similar_units_50"])
+            idx = data[i]["Unit_index"]
+            unit_index.append(idx)
+            codes = find_unit_core_depofacies(unit_index, data)
+            for code in codes:
                 name = map_core_depofacies_code_to_name(code)
-                if name != None:
+                if name:
                     new_point = handle_point(data[i][name], "0-50")
-                    print(new_point)
                     data[i].update({name: new_point})
 
-        if int(data[i]["Number_of_similar_units_100"]) > 0:
-            for unit_index in convert_string_to_array(data[i]["Index_of_similar_units_100"]):
-                code = find_unit_core_depofacies(unit_index, data)
+        if map_core_depofacies_code_to_name(data[i]["Core_depofacies"]):
+            unit_index = convert_string_to_array(data[i]["Index_of_similar_units_100"])
+            codes = find_unit_core_depofacies(unit_index, data)
+            for code in codes:
                 name = map_core_depofacies_code_to_name(code)
-                if name != None:
+                if name:
                     new_point = handle_point(data[i][name], "50-100")
                     data[i].update({name: new_point})
+
 
 with open("similar_unit.csv", "w") as new_file:
     dict_writer = DictWriter(new_file, fieldnames=headers)

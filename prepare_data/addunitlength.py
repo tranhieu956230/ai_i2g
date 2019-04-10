@@ -6,8 +6,8 @@ with open("data.csv") as csv_file:
     headers = csv_reader[0]
 
 with open("data.csv") as csv_file:
-    data = DictReader(csv_file)
-    data = list(data)
+    dict_writer = DictReader(csv_file)
+    data = list(dict_writer)
     with open("prepared_data.csv", "w") as write_file:
         headers.extend(["Unit_Thick"])
         writer = DictWriter(write_file, fieldnames=headers)
@@ -15,10 +15,10 @@ with open("data.csv") as csv_file:
         bound = 0
         for i in range(len(data) - 1):
             if data[i]["Unit_index"] != data[i+1]["Unit_index"]:
-                unit_length = float(data[i]["TVD"]) - float(data[bound]["TVD"])
-                idx = bound + 1 if bound > 0 else 0
-                data[idx].update({"Unit_Thick": unit_length})
-                writer.writerow(data[idx])
+                unit_thick = float(data[i]["TVD"]) - float(data[bound]["TVD"])
+                for j in range(bound + 1 if bound > 0 else 0, i + 1):
+                    data[j].update({"Unit_Thick": unit_thick})
+                    writer.writerow(data[j])
                 bound = i
 
 
