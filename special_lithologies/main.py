@@ -64,6 +64,7 @@ def add_point_marine_non_clastic(row):
         for code in groups[group_name]:
             name = map_core_depofacies_code_to_name(code)
             row.update({name: int(row[name]) + 2})
+    return row
 
 
 def add_point_coal(row):
@@ -73,27 +74,67 @@ def add_point_coal(row):
 
     for code in groups["Marginal_Marine"]:
         name = map_core_depofacies_code_to_name(code)
+        print(f"{name}: {row[name]}")
         row.update({name: int(row[name]) + 1})
+
+    return row
 
 
 def updateRow(row, litho_code):
     litho_code = int(litho_code)
     if litho_code in [1, 2]:
         return add_point_volcanics(row)
-    if litho_code in range(3, 9):
+    if litho_code in range(3, 8):
         return add_point_marine_non_clastic(row)
     if litho_code == 8:
         return add_point_coal(row)
     return row
 
 
+def find_unit_special_lithology(unit_index, data):
+    lithologies = []
+    for row in data:
+        if int(row["Unit_index"]) == int(unit_index) and row["Special_lithology"] != '-999':
+            lithologies.append(row["Special_lithology"])
+    return lithologies
+
+
+def removeDuplicate(arr):
+    arr.sort()
+    i = 0
+    while i < len(arr) - 1:
+        if arr[i] == arr[i + 1]:
+            arr.pop(i)
+            i -= 1
+        i += 1
+    return arr
+
+
+def find_adjacent_unit_special_lithology(unit_index, data):
+    before = find_unit_special_lithology(int(unit_index) - 1, data)
+    current = find_unit_special_lithology(int(unit_index), data)
+    after = find_unit_special_lithology(int(unit_index) + 1, data)
+    before.extend(current)
+    before.extend(after)
+    return removeDuplicate(before)
+
+
+with open("../similar_unit/similar_unit.csv") as i_file:
+    csv_reader = reader(i_file)
+    headers = list(csv_reader)[0]
+
 with open("../similar_unit/similar_unit.csv") as i_file:
     dict_reader = DictReader(i_file)
     data = list(dict_reader)
     for i in range(len(data)):
-        before = i - 1 if i > 0 else 0
-        current = i
-        after = i + 1 if i < len(data) - 1 else len(data) - 1
+        lithologies = find_adjacent_unit_special_lithology(data[i]["Unit_index"], data)
+        if len(lithologies) > 0:
+            for lithology in lithologies:
+                print(lithology)
+                data[i].update(updateRow(data[i], lithology))
 
-
-
+with open("special_lithology.csv", "w") as o_file:
+    dict_writer = DictWriter(o_file, fieldnames=headers)
+    dict_writer.writeheader()
+    for row in data:
+        dict_writer.writerow(row)
