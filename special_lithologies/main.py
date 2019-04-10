@@ -90,7 +90,10 @@ def updateRow(row, litho_code):
 with open("../similar_unit/similar_unit.csv") as i_file:
     dict_reader = DictReader(i_file)
     data = list(dict_reader)
-    for row in data:
+    for i in range(len(data)):
+        before = i - 1 if i > 0 else 0
+        current = i
+        after = i + 1 if i < len(data) - 1 else len(data) - 1
 
-        row.update(updateRow(row, row))
+
 

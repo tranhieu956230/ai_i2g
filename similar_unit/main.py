@@ -87,7 +87,7 @@ with open("../initial_point/init_point.csv") as file:
     dict_reader = DictReader(file)
     data = list(dict_reader)
     for i in range(len(data)):
-        if map_core_depofacies_code_to_name(data[i]["Core_depofacies"]):
+        if data[i]["Number_of_similar_units_50"] != "0":
             unit_index = convert_string_to_array(data[i]["Index_of_similar_units_50"])
             idx = data[i]["Unit_index"]
             unit_index.append(idx)
@@ -96,15 +96,17 @@ with open("../initial_point/init_point.csv") as file:
                 name = map_core_depofacies_code_to_name(code)
                 if name:
                     new_point = handle_point(data[i][name], "0-50")
+                    print(new_point)
                     data[i].update({name: new_point})
 
-        if map_core_depofacies_code_to_name(data[i]["Core_depofacies"]):
+        if data[i]["Number_of_similar_units_100"] != "0":
             unit_index = convert_string_to_array(data[i]["Index_of_similar_units_100"])
             codes = find_unit_core_depofacies(unit_index, data)
             for code in codes:
                 name = map_core_depofacies_code_to_name(code)
                 if name:
                     new_point = handle_point(data[i][name], "50-100")
+                    print(new_point)
                     data[i].update({name: new_point})
 
 
