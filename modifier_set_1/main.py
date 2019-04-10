@@ -1,1 +1,2 @@
-from modifier_set_1 import biostratigraphy
+
+from modifier_set_1 import vertical_proximity
