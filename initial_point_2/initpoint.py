@@ -68,9 +68,9 @@ def init_progradational_marine_shoreface(data_set):
         u_thick = float(data_set["Unit_Thick"])
         if 1 <= u_thick < 10:
             if u_thick >= 7:
-                return 5
-            elif u_thick >= 5:
                 return 6
+            elif u_thick >= 4:
+                return 5
             else:
                 return 4
 
