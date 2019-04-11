@@ -1,7 +1,7 @@
 def init_alluvial_fan(data_set):
     if data_set["Lithofacies_major"] == "1" and data_set["GR_shape_code"] == "4":
         u_thick = float(data_set["Unit_Thick"])
-        if 2 <= u_thick < 10:
+        if 1 <= u_thick < 10:
             if u_thick >= 7:
                 return 5
             elif u_thick >= 4:
@@ -14,7 +14,7 @@ def init_alluvial_fan(data_set):
 def init_marine_fan_delta(data_set):
     if data_set["Lithofacies_major"] == "1" and data_set["GR_shape_code"] == "4":
         u_thick = float(data_set["Unit_Thick"])
-        if 2 <= u_thick < 15:
+        if 1 <= u_thick < 15:
             if u_thick >= 10:
                 return 6
             elif u_thick >= 5:
@@ -27,7 +27,7 @@ def init_marine_fan_delta(data_set):
 def init_lacustrine_fan_delta(data_set):
     if data_set["Lithofacies_major"] == "1" and data_set["GR_shape_code"] == "4":
         u_thick = float(data_set["Unit_Thick"])
-        if 2 <= u_thick < 15:
+        if 1 <= u_thick < 15:
             if u_thick >= 10:
                 return 6
             elif u_thick >= 5:
@@ -40,7 +40,7 @@ def init_lacustrine_fan_delta(data_set):
 def init_marine_delta(data_set):
     if data_set["Lithofacies_major"] == "1" and data_set["GR_shape_code"] == "4":
         u_thick = float(data_set["Unit_Thick"])
-        if 2 <= u_thick < 15:
+        if 1 <= u_thick < 15:
             if u_thick >= 10:
                 return 7
             elif u_thick >= 5:
@@ -53,7 +53,7 @@ def init_marine_delta(data_set):
 def init_progradational_lacustrine_delta(data_set):
     if data_set["Lithofacies_major"] == "1" and data_set["GR_shape_code"] == "4":
         u_thick = float(data_set["Unit_Thick"])
-        if 2 <= u_thick < 15:
+        if 1 <= u_thick < 15:
             if u_thick >= 10:
                 return 7
             elif u_thick >= 5:
@@ -66,7 +66,7 @@ def init_progradational_lacustrine_delta(data_set):
 def init_progradational_marine_shoreface(data_set):
     if data_set["Lithofacies_major"] == "1" and data_set["GR_shape_code"] == "4":
         u_thick = float(data_set["Unit_Thick"])
-        if 2 <= u_thick < 10:
+        if 1 <= u_thick < 10:
             if u_thick >= 7:
                 return 5
             elif u_thick >= 5:
@@ -89,7 +89,7 @@ def init_progradational_marine_shoreface(data_set):
 def init_progradational_lacustrine_shoreface(data_set):
     if data_set["Lithofacies_major"] == "1" and data_set["GR_shape_code"] == "4":
         u_thick = float(data_set["Unit_Thick"])
-        if 2 <= u_thick < 10:
+        if 1 <= u_thick < 10:
             if u_thick >= 7:
                 return 5
             elif u_thick >= 5:
