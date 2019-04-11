@@ -341,8 +341,7 @@ dataset.Sharp_boundary = dataset.Sharp_boundary.astype(np.int8)
 dataset.dtypes
 dataset = dataset[['Depth', 'GR', 'MUD_VOLUME', 'TVD', 'Boundary_flag', 'Unit_index', 'GR_shape_code',
                    'Lithofacies_major', 'Lithofacies_mean', 'Sharp_boundary', 'Stacking_pattern',
-                   'Biostratigraphy', 'Reliability', 'Special_lithology', 'Core_depofacies',
+                   'Biostratigraphy', 'Reliability', 'Special_lithology', 'Core_depofacies', 'Lateral_proximity',
                    'Number_of_similar_units_50', 'Index_of_similar_units_50', 'Number_of_similar_units_100',
-
                    'Index_of_similar_units_100']]
 dataset.to_csv('data.csv', index=False)

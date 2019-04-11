@@ -62,4 +62,4 @@ with open("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv") as i_fi
     data = list(dict_reader)
     for row in data:
         if len(find_max_curve(row)) > 0:
-            print(find_max_curve(row))
+            print(find_ma0x_curve(row))
