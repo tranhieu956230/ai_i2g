@@ -29,7 +29,7 @@ with open("../initial_point_2/init_point.csv") as file:
     dict_reader = DictReader(file)
     data = list(dict_reader)
     for i in range(len(data)):
-        if data[i]["Number_of_similar_units_50"] != "0":
+        if data[i]["Number_of_similar_units_50"] != "0" or data[i]["Core_depofacies"] != "-999":
             unit_index = utils_func.convert_string_to_array(data[i]["Index_of_similar_units_50"])
             idx = data[i]["Unit_index"]
             unit_index.append(idx)
@@ -38,7 +38,6 @@ with open("../initial_point_2/init_point.csv") as file:
                 name = utils_func.map_core_depofacies_code_to_name(code)
                 if name:
                     new_point = handle_point(data[i][name], "0-50")
-                    print(new_point)
                     data[i].update({name: new_point})
 
         if data[i]["Number_of_similar_units_100"] != "0":
@@ -48,7 +47,6 @@ with open("../initial_point_2/init_point.csv") as file:
                 name = utils_func.map_core_depofacies_code_to_name(code)
                 if name:
                     new_point = handle_point(data[i][name], "50-100")
-                    print(new_point)
                     data[i].update({name: new_point})
 
 with open("similar_unit.csv", "w") as new_file:
