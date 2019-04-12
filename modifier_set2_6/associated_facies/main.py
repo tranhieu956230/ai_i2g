@@ -276,7 +276,7 @@ with open("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv") as i_fi
     data = list(dict_reader)
     simplified_data = simplify_data(data)
     for i in range(0, 2):
-        for row in simplified_data:
+        for row in reversed(simplified_data):
             groups = pick_group(divide_group(find_max_radius_30(row["Unit_index"], simplified_data)))
             row.update(update_row(row, groups))
 

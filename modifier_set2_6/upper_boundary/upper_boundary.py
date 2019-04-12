@@ -145,7 +145,7 @@ with open("../associated_facies/associated_facies.csv") as i_file:
     dict_reader = DictReader(i_file)
     data = list(dict_reader)
     for i in range(0, 2):
-        for row in data:
+        for row in reversed(data):
             group = pick_group(divide_group(find_max_upper(row["Unit_index"], data)))
             if group:
                 row.update(update_row(row, group))
