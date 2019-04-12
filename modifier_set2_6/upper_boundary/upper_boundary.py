@@ -103,10 +103,9 @@ def pick_group(data):
         if int(data[i - idx]["occurrence"]) == 0:
             data.pop(i - idx)
             idx += 1
-    if len(data) == 0:
-        return None
-
-    return data[randint(0, len(data) - 1)]
+    if len(data) == 1:
+        return data[0]
+    return None
 
 
 def update_row(row, group):
