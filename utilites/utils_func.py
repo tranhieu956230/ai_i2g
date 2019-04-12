@@ -190,3 +190,9 @@ def pick_most(data):
     if len(data) == 0:
         return None
     return sorted(data, key=Counter(data).get, reverse=True)[0]
+
+
+def handle_addition(point):
+    if int(point) <= 0:
+        return 0
+    return int(point)

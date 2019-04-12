@@ -12,7 +12,7 @@ def update_fluvial(row):
     for code in codes:
         name = utils_func.map_core_depofacies_code_to_name(code)
         if int(row[name]) > 0:
-            row.update({name: int(row[name]) + point})
+            row.update({name: utils_func.handle_addition(int(row[name]) + point)})
 
     return row
 
@@ -28,7 +28,7 @@ def update_shallow_lacustrine(row):
     for code in codes:
         name = utils_func.map_core_depofacies_code_to_name(code)
         if int(row[name]) > 0:
-            row.update({name: int(row[name]) + point})
+            row.update({name: utils_func.handle_addition(int(row[name]) + point)})
 
     return row
 
@@ -44,7 +44,7 @@ def update_deep_lacustrine(row):
     for code in codes:
         name = utils_func.map_core_depofacies_code_to_name(code)
         if int(row[name]) > 0:
-            row.update({name: int(row[name]) + point})
+            row.update({name: utils_func.handle_addition(int(row[name]) + point)})
 
     return row
 
@@ -60,7 +60,7 @@ def update_marginal_marine(row):
     for code in codes:
         name = utils_func.map_core_depofacies_code_to_name(code)
         if int(row[name]) > 0:
-            row.update({name: int(row[name]) + point})
+            row.update({name: utils_func.handle_addition(int(row[name]) + point)})
 
     return row
 
@@ -76,7 +76,7 @@ def update_shallow_marine(row):
     for code in codes:
         name = utils_func.map_core_depofacies_code_to_name(code)
         if int(row[name]) > 0:
-            row.update({name: int(row[name]) + point})
+            row.update({name: utils_func.handle_addition(int(row[name]) + point)})
 
     return row
 
@@ -92,6 +92,6 @@ def update_deep_marine(row):
     for code in codes:
         name = utils_func.map_core_depofacies_code_to_name(code)
         if int(row[name]) > 0:
-            row.update({name: int(row[name]) + point})
+            row.update({name: utils_func.handle_addition(int(row[name]) + point)})
 
     return row
