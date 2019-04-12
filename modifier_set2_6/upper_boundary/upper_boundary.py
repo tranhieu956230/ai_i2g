@@ -139,14 +139,30 @@ def update_row(row, group):
 with open("../lower_boundary/lower_boundary.csv") as file:
     reader = reader(file)
     headers = list(reader)[0]
+    headers.append("Facies_upper")
 
 with open("../lower_boundary/lower_boundary.csv") as i_file:
     dict_reader = DictReader(i_file)
     data = list(dict_reader)
     for i in range(0, 2):
+        groups = []
         for row in reversed(data):
             group = pick_group(divide_group(find_max_upper(row["Unit_index"], data)))
+            groups.append(group["name"] if group else None)
             if group:
                 row.update(update_row(row, group))
+        if i == 0:
+            with open(f"upper_boundary1.csv", "w") as o_file:
+                dict_writer = DictWriter(o_file, fieldnames=headers)
+                dict_writer.writeheader()
+                for i in range(len(data)):
+                    data[i].update({"Facies_upper": groups[i]})
+                    dict_writer.writerow(data[i])
 
-utils_func.export_to_csv("upper_boundary.csv", data)
+with open(f"upper_boundary.csv", "w") as o_file:
+    dict_writer = DictWriter(o_file, fieldnames=headers)
+    dict_writer.writeheader()
+    for i in range(len(data)):
+        data[i].update({"Facies_upper": groups[i]})
+        dict_writer.writerow(data[i])
+

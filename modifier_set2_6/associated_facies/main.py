@@ -73,7 +73,8 @@ def simplify_data(data):
             lithos.append(int(data[i]["Special_lithology"]))
         if data[i]["Unit_index"] != data[i + 1]["Unit_index"] or i == len(data) - 1:
             final_lithologies = deepcopy(utils_func.remove_duplicate(lithos))
-            data[i].update({"Special_lithologies": True if len(final_lithologies) > 0 else False, "Special_lithology": final_lithologies})
+            data[i].update({"Special_lithologies": True if len(final_lithologies) > 0 else False,
+                            "Special_lithology": final_lithologies})
             lst.append(data[i])
             lithos.clear()
 
@@ -133,11 +134,6 @@ def pick_group(data):
         return data
 
     lst = sorted(data, key=lambda k: (k["occurrence"], k["points"]), reverse=True)
-    first = lst[0]["points"]
-    
-    for item in lst:
-        if item["points"] != first:
-            return []
 
     return lst
 
@@ -266,21 +262,38 @@ def update_row(row, groups):
 with open("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv") as file:
     reader = reader(file)
     headers = list(reader)[0]
-
+    headers.append("Facies_group")
 
 with open("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv") as i_file:
     dict_reader = DictReader(i_file)
     data = list(dict_reader)
     simplified_data = simplify_data(data)
     for i in range(0, 2):
+        groups_set = []
         for row in reversed(simplified_data):
             groups = pick_group(divide_group(find_max_radius_30(row["Unit_index"], simplified_data)))
-            row.update(update_row(row, groups))
+            tmp = []
+            for item in groups:
+                tmp.append(item["name"])
+            groups_set.append(tmp)
+            if len(groups) > 0:
+                row.update(update_row(row, groups))
 
+        if i == 0:
+            with open(f"associated_facies1.csv", "w") as o_file:
+                dict_writer = DictWriter(o_file, fieldnames=headers)
+                dict_writer.writeheader()
+                for i in range(len(simplified_data)):
+                    simplified_data[i].update({"Facies_group": groups_set[i]})
+                    tmp = deepcopy(simplified_data[i])
+                    tmp.pop("Special_lithologies", None)
+                    dict_writer.writerow(tmp)
 
-with open("associated_facies.csv", "w") as o_file:
+with open(f"associated_facies.csv", "w") as o_file:
     dict_writer = DictWriter(o_file, fieldnames=headers)
     dict_writer.writeheader()
-    for row in simplified_data:
-        row.pop('Special_lithologies', None)
-        dict_writer.writerow(row)
+    for i in range(len(simplified_data)):
+        simplified_data[i].update({"Facies_group": groups_set[i]})
+        tmp = deepcopy(simplified_data[i])
+        tmp.pop("Special_lithologies", None)
+        dict_writer.writerow(tmp)

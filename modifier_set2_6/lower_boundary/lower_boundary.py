@@ -1,6 +1,6 @@
-from csv import DictReader, reader
+from csv import DictReader, reader, DictWriter
 from utilites import utils_func
-from random import randint
+from copy import deepcopy
 
 NAMES = [
     "Alluvial_Fan",
@@ -64,11 +64,12 @@ def find_max_curve(row):
     return lst
 
 
-def find_max_upper(unit_index, data):
+def find_max_lower(unit_index, data):
     unit_index = int(unit_index)
     lst = []
 
-    if unit_index == len(data) - 1 or len(utils_func.convert_string_to_array(data[unit_index]["Special_lithology"])) > 0:
+    if unit_index == len(data) - 1 or len(
+            utils_func.convert_string_to_array(data[unit_index]["Special_lithology"])) > 0:
         return lst
 
     lst.extend(find_max_curve(data[unit_index + 1]))
@@ -103,7 +104,6 @@ def pick_group(data):
         if int(data[i - idx]["occurrence"]) == 0:
             data.pop(i - idx)
             idx += 1
-    print(data)
     if len(data) == 1:
         return data[0]
     return None
@@ -140,16 +140,29 @@ def update_row(row, group):
 with open("../associated_facies/associated_facies.csv") as file:
     reader = reader(file)
     headers = list(reader)[0]
+    headers.append("Facies_lower")
 
 with open("../associated_facies/associated_facies.csv") as i_file:
     dict_reader = DictReader(i_file)
     data = list(dict_reader)
     for i in range(0, 2):
+        groups = []
         for row in reversed(data):
-            group = pick_group(divide_group(find_max_upper(row["Unit_index"], data)))
+            group = pick_group(divide_group(find_max_lower(row["Unit_index"], data)))
+            groups.append(group["name"] if group else None)
             if group:
                 row.update(update_row(row, group))
+        if i == 0:
+            with open(f"lower_boundary1.csv", "w") as o_file:
+                dict_writer = DictWriter(o_file, fieldnames=headers)
+                dict_writer.writeheader()
+                for i in range(len(data)):
+                    data[i].update({"Facies_lower": groups[i]})
+                    dict_writer.writerow(data[i])
 
-        print("Second ======================================")
-
-utils_func.export_to_csv("lower_boundary.csv", data)
+with open(f"lower_boundary.csv", "w") as o_file:
+    dict_writer = DictWriter(o_file, fieldnames=headers)
+    dict_writer.writeheader()
+    for i in range(len(data)):
+        data[i].update({"Facies_lower": groups[i]})
+        dict_writer.writerow(data[i])
