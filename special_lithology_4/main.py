@@ -93,8 +93,7 @@ with open("../similar_unit_3/similar_unit.csv") as i_file:
             for lithology in lithologies:
                 data[i].update(updateRow(data[i], lithology))
 
-with open("special_lithology.csv", "w") as o_file:
-    dict_writer = DictWriter(o_file, fieldnames=headers)
-    dict_writer.writeheader()
-    for row in data:
-        dict_writer.writerow(row)
+utils_func.export_to_csv("special_lithology.csv", data)
+
+utils_func.export_to_csv("special_lithology_unit_by_unit.csv", utils_func.convert_unit_by_unit(data))
+

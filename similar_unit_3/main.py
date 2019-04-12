@@ -49,8 +49,6 @@ with open("../initial_point_2/init_point.csv") as file:
                     new_point = handle_point(data[i][name], "50-100")
                     data[i].update({name: new_point})
 
-with open("similar_unit.csv", "w") as new_file:
-    dict_writer = DictWriter(new_file, fieldnames=headers)
-    dict_writer.writeheader()
-    for row in data:
-        dict_writer.writerow(row)
+utils_func.export_to_csv("similar_unit.csv", data)
+
+utils_func.export_to_csv("similar_unit_unit_by_unit.csv", utils_func.convert_unit_by_unit(data))

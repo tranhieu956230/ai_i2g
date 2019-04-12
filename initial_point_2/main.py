@@ -1,5 +1,5 @@
 from initial_point_2 import initpoint
-
+from utilites import utils_func
 from csv import DictReader, DictWriter, reader
 
 additional = [
@@ -45,7 +45,8 @@ with open("../prepare_data_1/prepare_data.csv") as csv_file:
     headers = csv_reader[0]
 
 with open("../prepare_data_1/prepare_data.csv") as csv_file:
-    data = DictReader(csv_file)
+    csv_reader = DictReader(csv_file)
+    data = list(csv_reader)
     with open("init_point.csv", "w") as write_file:
         headers.extend(additional)
         writer = DictWriter(write_file, fieldnames=headers)
@@ -89,3 +90,6 @@ with open("../prepare_data_1/prepare_data.csv") as csv_file:
                 "Distal_Marine_Turbidites": initpoint.init_distal_marine_turbidites(row),
                 "Marine_Deepwater": initpoint.init_marine_deepwater(row)})
             writer.writerow(row)
+
+
+utils_func.export_to_csv("init_point_unit_by_unit.csv", utils_func.convert_unit_by_unit(data))

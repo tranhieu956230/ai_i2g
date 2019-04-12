@@ -1,3 +1,7 @@
+from csv import DictWriter
+from copy import deepcopy
+
+
 def remove_duplicate(arr):
     arr.sort()
     i = 0
@@ -150,3 +154,27 @@ def update_row_group(group_name, row, point):
             else:
                 row.update({name: int(row[name]) + point})
     return row
+
+
+def convert_unit_by_unit(data):
+    lst = []
+    lithos = []
+    for i in range(0, len(data) - 1):
+        if data[i]["Special_lithology"] != "-999":
+            lithos.append(int(data[i]["Special_lithology"]))
+        if data[i]["Unit_index"] != data[i + 1]["Unit_index"] or i == len(data) - 1:
+            final_litho = deepcopy(remove_duplicate(lithos))
+            data[i].update({"Special_lithology": final_litho})
+            lst.append(data[i])
+            lithos.clear()
+
+    return lst
+
+
+def export_to_csv(filename, data):
+    headers = data[0].keys()
+    with open(filename, "w") as o_file:
+        csv_writer = DictWriter(o_file, fieldnames=headers)
+        csv_writer.writeheader()
+        for row in data:
+            csv_writer.writerow(row)

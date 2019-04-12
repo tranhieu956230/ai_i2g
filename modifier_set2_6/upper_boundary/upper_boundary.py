@@ -136,11 +136,11 @@ def update_row(row, group):
     return row
 
 
-with open("../associated_facies/associated_facies.csv") as file:
+with open("../lower_boundary/lower_boundary.csv") as file:
     reader = reader(file)
     headers = list(reader)[0]
 
-with open("../associated_facies/associated_facies.csv") as i_file:
+with open("../lower_boundary/lower_boundary.csv") as i_file:
     dict_reader = DictReader(i_file)
     data = list(dict_reader)
     for i in range(0, 2):
@@ -149,8 +149,4 @@ with open("../associated_facies/associated_facies.csv") as i_file:
             if group:
                 row.update(update_row(row, group))
 
-with open("upper_boundary.csv", "w") as o_file:
-    dict_writer = DictWriter(o_file, fieldnames=headers)
-    dict_writer.writeheader()
-    for row in data:
-        dict_writer.writerow(row)
+utils_func.export_to_csv("upper_boundary.csv", data)

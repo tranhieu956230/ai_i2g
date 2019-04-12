@@ -1,4 +1,4 @@
-from csv import DictWriter, DictReader, reader
+from csv import DictReader, reader
 from utilites import utils_func
 from random import randint
 
@@ -103,6 +103,7 @@ def pick_group(data):
         if int(data[i - idx]["occurrence"]) == 0:
             data.pop(i - idx)
             idx += 1
+    print(data)
     if len(data) == 1:
         return data[0]
     return None
@@ -136,11 +137,11 @@ def update_row(row, group):
     return row
 
 
-with open("../upper_boundary/upper_boundary.csv") as file:
+with open("../associated_facies/associated_facies.csv") as file:
     reader = reader(file)
     headers = list(reader)[0]
 
-with open("../upper_boundary/upper_boundary.csv") as i_file:
+with open("../associated_facies/associated_facies.csv") as i_file:
     dict_reader = DictReader(i_file)
     data = list(dict_reader)
     for i in range(0, 2):
@@ -149,8 +150,6 @@ with open("../upper_boundary/upper_boundary.csv") as i_file:
             if group:
                 row.update(update_row(row, group))
 
-with open("lower_boundary.csv", "w") as o_file:
-    dict_writer = DictWriter(o_file, fieldnames=headers)
-    dict_writer.writeheader()
-    for row in data:
-        dict_writer.writerow(row)
+        print("Second ======================================")
+
+utils_func.export_to_csv("lower_boundary.csv", data)
