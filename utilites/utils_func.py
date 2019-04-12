@@ -153,7 +153,7 @@ def update_row_group(group_name, row, point):
             if point == "x":
                 row.update({name: 0})
             else:
-                row.update({name: int(row[name]) + point})
+                row.update({name: handle_addition(int(row[name]) + point)})
     return row
 
 

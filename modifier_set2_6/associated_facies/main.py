@@ -132,7 +132,14 @@ def pick_group(data):
     if len(data) == 0:
         return data
 
-    return sorted(data, key=lambda k: (k["occurrence"], k["points"]), reverse=True)
+    lst = sorted(data, key=lambda k: (k["occurrence"], k["points"]), reverse=True)
+    first = lst[0]["points"]
+    
+    for item in lst:
+        if item["points"] != first:
+            return []
+
+    return lst
 
 
 def update_most_abundant(row, group):
