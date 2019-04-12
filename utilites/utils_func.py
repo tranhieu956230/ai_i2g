@@ -159,14 +159,19 @@ def update_row_group(group_name, row, point):
 def convert_unit_by_unit(data):
     lst = []
     lithos = []
-    for i in range(0, len(data) - 1):
+    depos = []
+    for i in range(0, len(data)):
         if data[i]["Special_lithology"] != "-999":
             lithos.append(int(data[i]["Special_lithology"]))
-        if data[i]["Unit_index"] != data[i + 1]["Unit_index"] or i == len(data) - 1:
+        if data[i]["Core_depofacies"] != "-999":
+            depos.append(data[i]["Core_depofacies"])
+        if data[i]["Boundary_flag"] == "1":
             final_litho = deepcopy(remove_duplicate(lithos))
-            data[i].update({"Special_lithology": final_litho})
+            final_depos = deepcopy(remove_duplicate(depos))
+            data[i].update({"Special_lithology": final_litho, "Core_depofacies": final_depos})
             lst.append(data[i])
             lithos.clear()
+            depos.clear()
 
     return lst
 

@@ -249,7 +249,7 @@ for i in range(n_samples):
                                 number_of_similar_pattern100[idx_set] += 1
                                 number_of_similar_pattern100[sub_idx_set] += 1
                                 similar_unit_index.append(unit_index[comparison_unit_id])
-                else:
+                elif abs(tvd[comparison_unit_id] - tvd[current_unit_id]) > 100:
                     break
                 sub_idx_set = []
         similar_unit_list100.append(similar_unit_index)

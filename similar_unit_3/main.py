@@ -1,5 +1,6 @@
 from csv import DictReader, DictWriter, reader
 from utilites import utils_func
+from copy import deepcopy
 
 
 def find_unit_core_depofacies(unit_index, data_list):
@@ -21,6 +22,22 @@ def handle_point(current_point, radius):
     return current_point
 
 
+def simplify_data(data):
+    lst = []
+    core_depos = []
+    for i in range(len(data)):
+        if data[i]["Special_lithology"] != "-999":
+            core_depos.append(data[i]["Special_lithology"])
+        if data[i]["Unit_index"] != data[i + 1 if i < len(data) - 1 else len(data) - 1]["Unit_index"] or i == len(
+                data) - 1:
+            final_depofacies = deepcopy(utils_func.remove_duplicate(core_depos))
+            data[i].update({"Core_depofacies": final_depofacies})
+            lst.append(data[i])
+            core_depos.clear()
+
+    return lst
+
+
 with open("../initial_point_2/init_point.csv") as file:
     csv_reader = reader(file)
     headers = list(csv_reader)[0]
@@ -28,6 +45,8 @@ with open("../initial_point_2/init_point.csv") as file:
 with open("../initial_point_2/init_point.csv") as file:
     dict_reader = DictReader(file)
     data = list(dict_reader)
+    for row in simplify_data(data):
+        print(row)
     for i in range(len(data)):
         if data[i]["Number_of_similar_units_50"] != "0" or data[i]["Core_depofacies"] != "-999":
             unit_index = utils_func.convert_string_to_array(data[i]["Index_of_similar_units_50"])

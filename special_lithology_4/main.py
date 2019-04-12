@@ -51,11 +51,12 @@ def find_adjacent_unit_special_lithology(unit_index, data):
     lithologies.extend(after)
     return utils_func.remove_duplicate(lithologies)
 
+
 def simplify_data(data):
     lst = []
     lithos = []
     for i in range(len(data) - 1):
-        if data[i]["Special_lithology"] != "-999":
+        if data[i]["Special_lithology"] != "-999" or i == len(data) - 1:
             lithos.append(data[i]["Special_lithology"])
         if data[i]["Unit_index"] != data[i + 1]["Unit_index"]:
             final_lithologies = deepcopy(utils_func.remove_duplicate(lithos))
@@ -65,19 +66,8 @@ def simplify_data(data):
             })
             lithos.clear()
 
-    for i in range(len(data) - 1, -1, -1):
-        if data[i]["Special_lithology"] != "-999":
-            lithos.append(data[i]["Special_lithology"])
-        if data[i]["Unit_index"] != data[i - 1]["Unit_index"]:
-            final_lithologies = deepcopy(utils_func.remove_duplicate(lithos))
-            lst.append({
-                "Unit_index": data[i]["Unit_index"],
-                "Special_lithologies": final_lithologies
-            })
-            lithos.clear()
-            break
-
     return lst
+
 
 with open("../similar_unit_3/similar_unit.csv") as i_file:
     csv_reader = reader(i_file)
@@ -96,4 +86,3 @@ with open("../similar_unit_3/similar_unit.csv") as i_file:
 utils_func.export_to_csv("special_lithology.csv", data)
 
 utils_func.export_to_csv("special_lithology_unit_by_unit.csv", utils_func.convert_unit_by_unit(data))
-
