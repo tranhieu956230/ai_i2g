@@ -4,11 +4,11 @@ from copy import deepcopy
 
 
 def find_unit_core_depofacies(unit_index, data_list):
-    depofacies = []
-    for row in data_list:
-        if row["Unit_index"] in unit_index:
-            depofacies.append(row["Core_depofacies"])
-    return utils_func.remove_duplicate(depofacies)
+    codes = []
+    for u in unit_index:
+        code = utils_func.pick_most(data_list[int(u)]["Core_depofacies"])
+        codes.append(code)
+    return codes
 
 
 def handle_point(current_point, radius):
@@ -26,10 +26,9 @@ def simplify_data(data):
     lst = []
     core_depos = []
     for i in range(len(data)):
-        if data[i]["Special_lithology"] != "-999":
-            core_depos.append(data[i]["Special_lithology"])
-        if data[i]["Unit_index"] != data[i + 1 if i < len(data) - 1 else len(data) - 1]["Unit_index"] or i == len(
-                data) - 1:
+        if float(data[i]["Core_depofacies"]) != -999:
+            core_depos.append(data[i]["Core_depofacies"])
+        if data[i]["Boundary_flag"] == "1":
             final_depofacies = deepcopy(utils_func.remove_duplicate(core_depos))
             data[i].update({"Core_depofacies": final_depofacies})
             lst.append(data[i])
@@ -45,14 +44,14 @@ with open("../initial_point_2/init_point.csv") as file:
 with open("../initial_point_2/init_point.csv") as file:
     dict_reader = DictReader(file)
     data = list(dict_reader)
-    for row in simplify_data(data):
-        print(row)
+    simplified = simplify_data(deepcopy(data))
+
     for i in range(len(data)):
         if data[i]["Number_of_similar_units_50"] != "0" or data[i]["Core_depofacies"] != "-999":
             unit_index = utils_func.convert_string_to_array(data[i]["Index_of_similar_units_50"])
             idx = data[i]["Unit_index"]
             unit_index.append(idx)
-            codes = find_unit_core_depofacies(unit_index, data)
+            codes = find_unit_core_depofacies(unit_index, simplified)
             for code in codes:
                 name = utils_func.map_core_depofacies_code_to_name(code)
                 if name:
@@ -61,7 +60,7 @@ with open("../initial_point_2/init_point.csv") as file:
 
         if data[i]["Number_of_similar_units_100"] != "0":
             unit_index = utils_func.convert_string_to_array(data[i]["Index_of_similar_units_100"])
-            codes = find_unit_core_depofacies(unit_index, data)
+            codes = find_unit_core_depofacies(unit_index, simplified)
             for code in codes:
                 name = utils_func.map_core_depofacies_code_to_name(code)
                 if name:
@@ -71,3 +70,4 @@ with open("../initial_point_2/init_point.csv") as file:
 utils_func.export_to_csv("similar_unit.csv", data)
 
 utils_func.export_to_csv("similar_unit_unit_by_unit.csv", utils_func.convert_unit_by_unit(data))
+

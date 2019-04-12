@@ -55,10 +55,10 @@ def find_adjacent_unit_special_lithology(unit_index, data):
 def simplify_data(data):
     lst = []
     lithos = []
-    for i in range(len(data) - 1):
-        if data[i]["Special_lithology"] != "-999" or i == len(data) - 1:
+    for i in range(len(data)):
+        if data[i]["Special_lithology"] != "-999":
             lithos.append(data[i]["Special_lithology"])
-        if data[i]["Unit_index"] != data[i + 1]["Unit_index"]:
+        if data[i]["Boundary_flag"]:
             final_lithologies = deepcopy(utils_func.remove_duplicate(lithos))
             lst.append({
                 "Unit_index": data[i]["Unit_index"],

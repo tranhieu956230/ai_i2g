@@ -1,5 +1,6 @@
 from csv import DictWriter
 from copy import deepcopy
+from collections import Counter
 
 
 def remove_duplicate(arr):
@@ -162,9 +163,9 @@ def convert_unit_by_unit(data):
     depos = []
     for i in range(0, len(data)):
         if data[i]["Special_lithology"] != "-999":
-            lithos.append(int(data[i]["Special_lithology"]))
+            lithos.append(float(data[i]["Special_lithology"]))
         if data[i]["Core_depofacies"] != "-999":
-            depos.append(data[i]["Core_depofacies"])
+            depos.append((float(data[i]["Core_depofacies"])))
         if data[i]["Boundary_flag"] == "1":
             final_litho = deepcopy(remove_duplicate(lithos))
             final_depos = deepcopy(remove_duplicate(depos))
@@ -183,3 +184,9 @@ def export_to_csv(filename, data):
         csv_writer.writeheader()
         for row in data:
             csv_writer.writerow(row)
+
+
+def pick_most(data):
+    if len(data) == 0:
+        return None
+    return sorted(data, key=Counter(data).get, reverse=True)[0]
