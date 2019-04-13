@@ -115,7 +115,7 @@ def update_row(row, group):
     if group["name"] == "Fluvial":
         points = [[2, 2], [-1, -1], [-2, 0], [-1, 0], [-1, 0], ["x", -3]]
 
-    if group["name"] == "Shadow_Lacustrine":
+    if group["name"] == "Shallow_Lacustrine":
         points = [[-1, 0], [2, 2], [-1, -1], [0, 0], [0, 0], ["x", -3]]
 
     if group["name"] == "Deep_Lacustrine":

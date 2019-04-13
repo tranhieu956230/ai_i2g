@@ -143,7 +143,7 @@ def update_most_abundant(row, group):
     if group["name"] == "Fluvial":
         points = [2, 0, -1, 0, -1, -2]
 
-    if group["name"] == "Shadow_Lacustrine":
+    if group["name"] == "Shallow_Lacustrine":
         points = [0, 2, 0, -1, -1, -2]
 
     if group["name"] == "Deep_Lacustrine":
@@ -158,6 +158,11 @@ def update_most_abundant(row, group):
     if group["name"] == "Deep_Marine":
         points = [-2, -1, -2, -1, 0, 2]
 
+    if row["Unit_index"] == "219":
+        print("Most abundant")
+        for i in range(len(points)):
+            print(points[i])
+
     for i in range(len(points)):
         row.update(utils_func.update_row_group(GROUPS[i], row, points[i]))
 
@@ -169,7 +174,7 @@ def update_second_most_abundant(row, group):
     if group["name"] == "Fluvial":
         points = [1, 0, 0, 0, 0, -2]
 
-    if group["name"] == "Shadow_Lacustrine":
+    if group["name"] == "Shallow_Lacustrine":
         points = [0, 1, 0, 0, -1, -2]
 
     if group["name"] == "Deep_Lacustrine":
@@ -184,6 +189,11 @@ def update_second_most_abundant(row, group):
     if group["name"] == "Deep_Marine":
         points = [-2, -2, -2, -1, 0, 1]
 
+    if row["Unit_index"] == "219":
+        print("second abundant")
+        for i in range(len(points)):
+            print(points[i])
+
     for i in range(len(points)):
         row.update(utils_func.update_row_group(GROUPS[i], row, points[i]))
 
@@ -195,7 +205,7 @@ def update_third_most_abundant(row, group):
     if group["name"] == "Fluvial":
         points = [0, 0, 0, 0, 0, -1]
 
-    if group["name"] == "Shadow_Lacustrine":
+    if group["name"] == "Shallow_Lacustrine":
         points = [0, 0, 1, 0, 0, -1]
 
     if group["name"] == "Deep_Lacustrine":
@@ -210,6 +220,11 @@ def update_third_most_abundant(row, group):
     if group["name"] == "Deep_Marine":
         points = [-1, -1, -1, 0, 0, 0]
 
+    if row["Unit_index"] == "219":
+        print("third abundant")
+        for i in range(len(points)):
+            print(points[i])
+
     for i in range(len(points)):
         row.update(utils_func.update_row_group(GROUPS[i], row, points[i]))
 
@@ -221,7 +236,7 @@ def update_4_6_most_abundant(row, group):
     if group["name"] == "Fluvial":
         points = [-2, 0, 0, 0, 0, 0]
 
-    if group["name"] == "Shadow_Lacustrine":
+    if group["name"] == "Shallow_Lacustrine":
         points = [0, -2, 0, 0, 0, 0]
 
     if group["name"] == "Deep_Lacustrine":
@@ -235,6 +250,11 @@ def update_4_6_most_abundant(row, group):
 
     if group["name"] == "Deep_Marine":
         points = [0, 0, 0, 0, 0, -2]
+
+    if row["Unit_index"] == "219":
+        print("fourth")
+        for i in range(len(points)):
+            print(points[i])
 
     for i in range(len(points)):
         row.update(utils_func.update_row_group(GROUPS[i], row, points[i]))
@@ -271,7 +291,6 @@ with open("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv") as i_fi
     for i in range(0, 2):
         for row in reversed(simplified_data):
             groups = pick_group(divide_group(find_max_radius_30(row["Unit_index"], simplified_data)))
-            print(f"{groups}: {row['Unit_index']}")
             tmp = []
             for item in groups:
                 tmp.append(item["name"])
@@ -286,4 +305,3 @@ with open("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv") as i_fi
                 tmp = deepcopy(simplified_data[i])
                 tmp.pop("Special_lithologies", None)
                 dict_writer.writerow(tmp)
-
