@@ -151,8 +151,8 @@ with open("../lower_boundary/lower_boundary2.csv") as i_file:
                 row.update(update_row(row, group))
                 row.update({"Facies_above": group["name"] if group else None})
 
-    with open(f"upper_boundary{i + 1}.csv", "w") as o_file:
-        dict_writer = DictWriter(o_file, fieldnames=headers)
-        dict_writer.writeheader()
-        for row in data:
-            dict_writer.writerow(row)
+        with open(f"upper_boundary{i + 1}.csv", "w") as o_file:
+            dict_writer = DictWriter(o_file, fieldnames=headers)
+            dict_writer.writeheader()
+            for row in data:
+                dict_writer.writerow(row)
