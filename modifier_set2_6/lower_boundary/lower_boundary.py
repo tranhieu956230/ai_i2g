@@ -137,33 +137,25 @@ def update_row(row, group):
     return row
 
 
-with open("../associated_facies/associated_facies.csv") as file:
+with open("../associated_facies/associated_facies2.csv") as file:
     reader = reader(file)
     headers = list(reader)[0]
-    headers.append("Facies_lower")
+    headers.append("Facies_below")
 
-with open("../associated_facies/associated_facies.csv") as i_file:
+with open("../associated_facies/associated_facies2.csv") as i_file:
     dict_reader = DictReader(i_file)
     data = list(dict_reader)
     for i in range(0, 2):
-        groups = []
         for row in reversed(data):
             group = pick_group(divide_group(find_max_lower(row["Unit_index"], data)))
-            print(f"{group}: {row['Unit_index']}")
-            groups.append(group["name"] if group else None)
             if group:
                 row.update(update_row(row, group))
-        if i == 0:
-            with open(f"lower_boundary1.csv", "w") as o_file:
-                dict_writer = DictWriter(o_file, fieldnames=headers)
-                dict_writer.writeheader()
-                for i in range(len(data)):
-                    data[i].update({"Facies_lower": groups[i]})
-                    dict_writer.writerow(data[i])
+                row.update({"Facies_below": group["name"] if group else None})
 
-with open(f"lower_boundary.csv", "w") as o_file:
-    dict_writer = DictWriter(o_file, fieldnames=headers)
-    dict_writer.writeheader()
-    for i in range(len(data)):
-        data[i].update({"Facies_lower": groups[i]})
-        dict_writer.writerow(data[i])
+        with open(f"lower_boundary{i + 1}.csv", "w") as o_file:
+            dict_writer = DictWriter(o_file, fieldnames=headers)
+            dict_writer.writeheader()
+            for row in data:
+                dict_writer.writerow(row)
+
+

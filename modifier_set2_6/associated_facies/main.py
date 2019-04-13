@@ -269,31 +269,21 @@ with open("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv") as i_fi
     data = list(dict_reader)
     simplified_data = simplify_data(data)
     for i in range(0, 2):
-        groups_set = []
         for row in reversed(simplified_data):
             groups = pick_group(divide_group(find_max_radius_30(row["Unit_index"], simplified_data)))
+            print(f"{groups}: {row['Unit_index']}")
             tmp = []
             for item in groups:
                 tmp.append(item["name"])
-            groups_set.append(tmp)
             if len(groups) > 0:
                 row.update(update_row(row, groups))
+                row.update({"Facies_group": tmp})
 
-        if i == 0:
-            with open(f"associated_facies1.csv", "w") as o_file:
-                dict_writer = DictWriter(o_file, fieldnames=headers)
-                dict_writer.writeheader()
-                for i in range(len(simplified_data)):
-                    simplified_data[i].update({"Facies_group": groups_set[i]})
-                    tmp = deepcopy(simplified_data[i])
-                    tmp.pop("Special_lithologies", None)
-                    dict_writer.writerow(tmp)
+        with open(f"associated_facies{i + 1}.csv", "w") as o_file:
+            dict_writer = DictWriter(o_file, fieldnames=headers)
+            dict_writer.writeheader()
+            for i in range(len(simplified_data)):
+                tmp = deepcopy(simplified_data[i])
+                tmp.pop("Special_lithologies", None)
+                dict_writer.writerow(tmp)
 
-with open(f"associated_facies.csv", "w") as o_file:
-    dict_writer = DictWriter(o_file, fieldnames=headers)
-    dict_writer.writeheader()
-    for i in range(len(simplified_data)):
-        simplified_data[i].update({"Facies_group": groups_set[i]})
-        tmp = deepcopy(simplified_data[i])
-        tmp.pop("Special_lithologies", None)
-        dict_writer.writerow(tmp)
