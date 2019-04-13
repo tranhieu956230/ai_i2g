@@ -149,6 +149,7 @@ with open("../associated_facies/associated_facies.csv") as i_file:
         groups = []
         for row in reversed(data):
             group = pick_group(divide_group(find_max_lower(row["Unit_index"], data)))
+            print(f"{group}: {row['Unit_index']}")
             groups.append(group["name"] if group else None)
             if group:
                 row.update(update_row(row, group))

@@ -68,10 +68,10 @@ def simplify_data(data):
     lst = []
     lithos = []
 
-    for i in range(len(data) - 1):
+    for i in range(len(data)):
         if data[i]["Special_lithology"] != "-999":
             lithos.append(int(data[i]["Special_lithology"]))
-        if data[i]["Unit_index"] != data[i + 1]["Unit_index"] or i == len(data) - 1:
+        if data[i]["Boundary_flag"] == "1":
             final_lithologies = deepcopy(utils_func.remove_duplicate(lithos))
             data[i].update({"Special_lithologies": True if len(final_lithologies) > 0 else False,
                             "Special_lithology": final_lithologies})
