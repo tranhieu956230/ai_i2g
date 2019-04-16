@@ -137,25 +137,21 @@ def update_row(row, group):
     return row
 
 
-with open("../associated_facies/associated_facies2.csv") as file:
-    reader = reader(file)
-    headers = list(reader)[0]
-    headers.append("Facies_below")
+def main(input_file, i):
+    with open(input_file) as file:
+        csv_reader = reader(file)
+        headers = list(csv_reader)[0]
+        if "Facies_below" not in headers:
+            headers.append("Facies_below")
 
-with open("../associated_facies/associated_facies2.csv") as i_file:
-    dict_reader = DictReader(i_file)
-    data = list(dict_reader)
-    for i in range(0, 2):
+    with open(input_file) as i_file:
+        dict_reader = DictReader(i_file)
+        data = list(dict_reader)
         for row in reversed(data):
             group = pick_group(divide_group(find_max_lower(row["Unit_index"], data)))
             if group:
                 row.update(update_row(row, group))
                 row.update({"Facies_below": group["name"] if group else None})
 
-        with open(f"lower_boundary{i + 1}.csv", "w") as o_file:
-            dict_writer = DictWriter(o_file, fieldnames=headers)
-            dict_writer.writeheader()
-            for row in data:
-                dict_writer.writerow(row)
-
+        utils_func.export_to_csv(f"lower_boundary{i}.csv", data, headers)
 

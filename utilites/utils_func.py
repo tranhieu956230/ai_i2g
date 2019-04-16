@@ -177,8 +177,9 @@ def convert_unit_by_unit(data):
     return lst
 
 
-def export_to_csv(filename, data):
-    headers = data[0].keys()
+def export_to_csv(filename, data, headers):
+    if not headers:
+        headers = data[0].keys()
     with open(filename, "w") as o_file:
         csv_writer = DictWriter(o_file, fieldnames=headers)
         csv_writer.writeheader()

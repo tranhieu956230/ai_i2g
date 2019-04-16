@@ -1,6 +1,8 @@
-from csv import DictWriter, DictReader, reader
+from csv import DictReader, reader
 from copy import deepcopy
 from utilites import utils_func
+from modifier_set2_6.lower_boundary import lower_boundary
+from modifier_set2_6.upper_boundary import upper_boundary
 
 NAMES = [
     "Alluvial_Fan",
@@ -73,29 +75,36 @@ def simplify_data(data):
             lithos.append(int(data[i]["Special_lithology"]))
         if data[i]["Boundary_flag"] == "1":
             final_lithologies = deepcopy(utils_func.remove_duplicate(lithos))
-            data[i].update({"Special_lithologies": True if len(final_lithologies) > 0 else False,
-                            "Special_lithology": final_lithologies})
+            data[i].update({"Special_lithology": final_lithologies})
             lst.append(data[i])
             lithos.clear()
 
     return lst
 
 
+def contain_special_lithology(litho):
+    if litho == "[]":
+        return True
+    return False
+
+
 def find_max_radius_30(unit_index, data):
     unit_index = int(unit_index)
     lst = []
 
-    if data[unit_index]["Special_lithologies"]:
+    if contain_special_lithology(data[unit_index]["Special_lithology"]):
         return lst
 
     for i in range(unit_index, -1, -1):
-        if abs(float(data[i]["TVD"]) - float(data[unit_index]["TVD"])) <= 30 and not data[i]["Special_lithologies"]:
+        if abs(float(data[i]["TVD"]) - float(data[unit_index]["TVD"])) <= 30 and not contain_special_lithology(
+                data[unit_index]["Special_lithology"]):
             lst.extend(find_max_curve(data[i]))
         else:
             break
 
     for i in range(unit_index + 1, len(data), 1):
-        if abs(float(data[i]["TVD"]) - float(data[unit_index]["TVD"])) <= 30 and not data[i]["Special_lithologies"]:
+        if abs(float(data[i]["TVD"]) - float(data[unit_index]["TVD"])) <= 30 and not contain_special_lithology(
+                data[unit_index]["Special_lithology"]):
             lst.extend(find_max_curve(data[i]))
         else:
             break
@@ -279,16 +288,19 @@ def update_row(row, groups):
     return row
 
 
-with open("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv") as file:
-    reader = reader(file)
-    headers = list(reader)[0]
-    headers.append("Facies_group")
+def main(input_file, iter):
+    with open(input_file) as file:
+        csv_reader = reader(file)
+        headers = list(csv_reader)[0]
+        if "Facies_group" not in headers:
+            headers.append("Facies_group")
 
-with open("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv") as i_file:
-    dict_reader = DictReader(i_file)
-    data = list(dict_reader)
-    simplified_data = simplify_data(data)
-    for i in range(0, 2):
+    with open(input_file) as i_file:
+        dict_reader = DictReader(i_file, )
+        data = list(dict_reader)
+
+        simplified_data = simplify_data(data) if iter == 1 else data
+
         for row in reversed(simplified_data):
             groups = pick_group(divide_group(find_max_radius_30(row["Unit_index"], simplified_data)))
             tmp = []
@@ -298,10 +310,13 @@ with open("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv") as i_fi
                 row.update(update_row(row, groups))
                 row.update({"Facies_group": tmp})
 
-        with open(f"associated_facies{i + 1}.csv", "w") as o_file:
-            dict_writer = DictWriter(o_file, fieldnames=headers)
-            dict_writer.writeheader()
-            for i in range(len(simplified_data)):
-                tmp = deepcopy(simplified_data[i])
-                tmp.pop("Special_lithologies", None)
-                dict_writer.writerow(tmp)
+        utils_func.export_to_csv(f"associated_facies{iter}.csv", simplified_data, headers)
+
+
+for i in range(0, 2):
+    if i == 0:
+        main("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv", i + 1)
+    else:
+        main(f"upper_boundary{i}.csv", i + 1)
+    lower_boundary.main(f"associated_facies{i + 1}.csv", i + 1)
+    upper_boundary.main(f"lower_boundary{i + 1}.csv", i + 1)
