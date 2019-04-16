@@ -57,4 +57,4 @@ with open("../biostratigraphy/biostratigraphy.csv") as csv_file:
                 "Marine_Deepwater": update_point.update_marine_deepwater(row)})
             writer.writerow(row)
 
-utils_func.export_to_csv("vertical_proximity_unit_by_unit.csv", utils_func.convert_unit_by_unit(data))
+utils_func.export_to_csv("vertical_proximity_unit_by_unit.csv", utils_func.convert_unit_by_unit(data), headers)

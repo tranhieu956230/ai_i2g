@@ -155,3 +155,5 @@ def main(input_file, i):
 
         utils_func.export_to_csv(f"upper_boundary{i}.csv", data, headers)
 
+        if i == 2:
+            utils_func.export_final(f"final.csv", data, headers)

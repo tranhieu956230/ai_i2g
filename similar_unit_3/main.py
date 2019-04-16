@@ -67,7 +67,7 @@ with open("../initial_point_2/init_point.csv") as file:
                     new_point = handle_point(data[i][name], "50-100")
                     data[i].update({name: new_point})
 
-utils_func.export_to_csv("similar_unit.csv", data)
+utils_func.export_to_csv("similar_unit.csv", data, headers)
 
-utils_func.export_to_csv("similar_unit_unit_by_unit.csv", utils_func.convert_unit_by_unit(data))
+utils_func.export_to_csv("similar_unit_unit_by_unit.csv", utils_func.convert_unit_by_unit(data), headers)
 

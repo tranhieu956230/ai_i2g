@@ -17,6 +17,6 @@ with open("../../special_lithology_4/special_lithology.csv") as i_file:
         row.update(update_point.update_shallow_marine(row))
         row.update(update_point.update_deep_marine(row))
 
-utils_func.export_to_csv("biostratigraphy.csv", data)
+utils_func.export_to_csv("biostratigraphy.csv", data, headers)
 
-utils_func.export_to_csv("biostratigraphy_unit_by_unit.csv", utils_func.convert_unit_by_unit(data))
+utils_func.export_to_csv("biostratigraphy_unit_by_unit.csv", utils_func.convert_unit_by_unit(data), headers)
