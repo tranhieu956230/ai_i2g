@@ -83,9 +83,9 @@ def simplify_data(data):
 
 
 def contain_special_lithology(litho):
-    if litho == "[]":
-        return True
-    return False
+    if litho == "[]" or not litho:
+        return False
+    return True
 
 
 def find_max_radius_30(unit_index, data):

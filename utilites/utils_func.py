@@ -132,11 +132,21 @@ def convert_unit_by_unit(data):
     return lst
 
 
+
+def contain_special_lithology(litho):
+    if litho == "[]" or not litho:
+        return False
+    return True
+
+
 def export_final(filename, data, headers):
     if not headers:
         headers = data[0].keys()
 
+    keys = ["Most", "Second_Most", "Third_Most"]
+
     headers.append("Sum")
+    headers.extend(keys)
 
     for row in data:
         lst = []
@@ -144,8 +154,20 @@ def export_final(filename, data, headers):
             if int(row[value]) != 0:
                 lst.append({value: int(row[value])})
         lst = sorted(lst, key=lambda it: it[[key for key in it.keys()][0]], reverse=True)
-        for i in range(len(lst)):
+        for i in range(len(lst) - 1):
+            if lst[i][[key for key in lst[i].keys()][0]] == lst[i + 1][[key for key in lst[i + 1].keys()][0]]:
+                lst[i][[key for key in lst[i].keys()][0]] = "unknown"
+                lst[i + 1][[key for key in lst[i + 1].keys()][0]] = "unknown"
 
+        for i in range(len(lst)):
+            if len(lst) > i:
+                name = [key for key in lst[i].keys()][0]
+                if lst[i][name] == "unknown" or contain_special_lithology(row["Special_lithology"]):
+                    row.update({keys[i]: "unknown"})
+                else:
+                    row.update({keys[i]: name})
+            if i == 2:
+                break
 
     for row in data:
         total = 0
