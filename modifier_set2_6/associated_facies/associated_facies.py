@@ -167,7 +167,6 @@ def update_most_abundant(row, group):
     if group["name"] == "Deep_Marine":
         points = [-2, -1, -2, -1, 0, 2]
 
-
     for i in range(len(points)):
         row.update(utils_func.update_row_group(GROUPS[i], row, points[i]))
 
@@ -220,7 +219,6 @@ def update_third_most_abundant(row, group):
     if group["name"] == "Deep_Marine":
         points = [-1, -1, -1, 0, 0, 0]
 
-
     for i in range(len(points)):
         row.update(utils_func.update_row_group(GROUPS[i], row, points[i]))
 
@@ -246,7 +244,6 @@ def update_4_6_most_abundant(row, group):
 
     if group["name"] == "Deep_Marine":
         points = [0, 0, 0, 0, 0, -2]
-
 
     for i in range(len(points)):
         row.update(utils_func.update_row_group(GROUPS[i], row, points[i]))
@@ -294,6 +291,3 @@ def associated_facies(input_file, iter):
                 row.update({"Facies_group": tmp})
 
         utils_func.export_to_csv(f"csv/associated_facies{iter}.csv", simplified_data, headers)
-
-
-
