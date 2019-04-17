@@ -153,5 +153,5 @@ def main(input_file, i):
                 row.update(update_row(row, group))
                 row.update({"Facies_below": group["name"] if group else None})
 
-        utils_func.export_to_csv(f"lower_boundary{i}.csv", data, headers)
+        utils_func.export_to_csv(f"../../csv/lower_boundary{i}.csv", data, headers)
 

@@ -56,7 +56,7 @@ def simplify_data(data):
     lst = []
     lithos = []
     for i in range(len(data)):
-        if data[i]["Special_lithology"] != "-999":
+        if data[i]["Special_lithology"] != "-9999":
             lithos.append(data[i]["Special_lithology"])
         if data[i]["Boundary_flag"]:
             final_lithologies = deepcopy(utils_func.remove_duplicate(lithos))
@@ -69,11 +69,11 @@ def simplify_data(data):
     return lst
 
 
-with open("../similar_unit_3/similar_unit.csv") as i_file:
+with open("../csv/similar_unit.csv") as i_file:
     csv_reader = reader(i_file)
     headers = list(csv_reader)[0]
 
-with open("../similar_unit_3/similar_unit.csv") as i_file:
+with open("../csv/similar_unit.csv") as i_file:
     dict_reader = DictReader(i_file)
     data = list(dict_reader)
     simplifed_unit = simplify_data(data)
@@ -83,6 +83,6 @@ with open("../similar_unit_3/similar_unit.csv") as i_file:
             for lithology in lithologies:
                 data[i].update(updateRow(data[i], lithology))
 
-utils_func.export_to_csv("special_lithology.csv", data, headers)
+utils_func.export_to_csv("../csv/special_lithology.csv", data, headers)
 
-utils_func.export_to_csv("special_lithology_unit_by_unit.csv", utils_func.convert_unit_by_unit(data), headers)
+utils_func.export_to_csv("../csv/special_lithology_unit_by_unit.csv", utils_func.convert_unit_by_unit(data), headers)

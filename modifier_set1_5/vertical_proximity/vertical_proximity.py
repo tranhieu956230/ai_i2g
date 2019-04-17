@@ -2,14 +2,14 @@ from modifier_set1_5.vertical_proximity import update_point
 from csv import DictReader, DictWriter, reader
 from utilites import utils_func
 
-with open("../biostratigraphy/biostratigraphy.csv") as csv_file:
+with open("../../csv/biostratigraphy.csv") as csv_file:
     csv_reader = list(reader(csv_file))
     headers = csv_reader[0]
 
-with open("../biostratigraphy/biostratigraphy.csv") as csv_file:
+with open("../../csv/biostratigraphy.csv") as csv_file:
     csv_reader = DictReader(csv_file)
     data = list(csv_reader)
-    with open("vertical_proximity.csv", "w") as write_file:
+    with open("../../csv/vertical_proximity.csv", "w") as write_file:
         writer = DictWriter(write_file, fieldnames=headers)
         writer.writeheader()
 
@@ -57,4 +57,4 @@ with open("../biostratigraphy/biostratigraphy.csv") as csv_file:
                 "Marine_Deepwater": update_point.update_marine_deepwater(row)})
             writer.writerow(row)
 
-utils_func.export_to_csv("vertical_proximity_unit_by_unit.csv", utils_func.convert_unit_by_unit(data), headers)
+utils_func.export_to_csv("../../csv/vertical_proximity_unit_by_unit.csv", utils_func.convert_unit_by_unit(data), headers)

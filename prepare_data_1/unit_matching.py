@@ -6,7 +6,7 @@ import seaborn as sns
 sns.set()
 
 # Importing the dataset
-dataset = pd.read_csv('initial_data.csv')
+dataset = pd.read_csv('../csv/initial_data.csv')
 
 gr = dataset.GR.values
 tvd = dataset.TVD.values
@@ -340,8 +340,8 @@ dataset.Number_of_similar_units_100 = dataset.Number_of_similar_units_100.astype
 dataset.Sharp_boundary = dataset.Sharp_boundary.astype(np.int8)
 dataset.dtypes
 dataset = dataset[['Depth', 'GR', 'MUD_VOLUME', 'TVD', 'Boundary_flag', 'Unit_index', 'GR_shape_code',
-                   'Lithofacies_major', 'Lithofacies_mean', 'Sharp_boundary', 'Stacking_pattern',
+                   'Lithofacies_major', 'Sharp_boundary', 'Stacking_pattern',
                    'Biostratigraphy', 'Reliability', 'Special_lithology', 'Core_depofacies', 'Lateral_proximity',
                    'Number_of_similar_units_50', 'Index_of_similar_units_50', 'Number_of_similar_units_100',
                    'Index_of_similar_units_100']]
-dataset.to_csv('data.csv', index=False)
+dataset.to_csv('../csv/data.csv', index=False)

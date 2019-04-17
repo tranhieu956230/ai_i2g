@@ -1,4 +1,4 @@
-from csv import DictWriter
+from csv import DictWriter, DictReader
 from copy import deepcopy
 from collections import Counter
 
@@ -117,9 +117,9 @@ def convert_unit_by_unit(data):
     lithos = []
     depos = []
     for i in range(0, len(data)):
-        if data[i]["Special_lithology"] != "-999":
+        if data[i]["Special_lithology"] != "-9999":
             lithos.append(float(data[i]["Special_lithology"]))
-        if data[i]["Core_depofacies"] != "-999":
+        if data[i]["Core_depofacies"] != "-9999":
             depos.append((float(data[i]["Core_depofacies"])))
         if data[i]["Boundary_flag"] == "1":
             final_litho = deepcopy(remove_duplicate(lithos))
@@ -132,14 +132,13 @@ def convert_unit_by_unit(data):
     return lst
 
 
-
 def contain_special_lithology(litho):
     if litho == "[]" or not litho:
         return False
     return True
 
 
-def export_final(filename, data, headers):
+def export_final(initial_file, filename, data, headers):
     if not headers:
         headers = data[0].keys()
 
@@ -182,10 +181,20 @@ def export_final(filename, data, headers):
             except ZeroDivisionError:
                 print(row["Unit_index"])
 
+    with open(initial_file) as i_file:
+        csv_reader = DictReader(i_file)
+        initial_data = list(csv_reader)
+
     with open(filename, "w") as o_file:
         csv_writer = DictWriter(o_file, fieldnames=headers)
         csv_writer.writeheader()
-        for row in data:
+        for row in initial_data:
+            for header in headers:
+                if header not in row:
+                    try:
+                        row.update({header: data[int(row["Unit_index"])][header]})
+                    except KeyError:
+                        print(row["Unit_index"])
             csv_writer.writerow(row)
 
 

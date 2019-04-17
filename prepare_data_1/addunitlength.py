@@ -2,14 +2,14 @@ from csv import DictReader, DictWriter, reader
 from utilites import utils_func
 from prepare_data_1 import unit_matching
 
-with open("data.csv") as csv_file:
+with open("../csv/data.csv") as csv_file:
     csv_reader = list(reader(csv_file))
     headers = csv_reader[0]
 
-with open("data.csv") as csv_file:
+with open("../csv/data.csv") as csv_file:
     dict_writer = DictReader(csv_file)
     data = list(dict_writer)
-    with open("prepare_data.csv", "w") as write_file:
+    with open("../csv/prepare_data.csv", "w") as write_file:
         headers.extend(["Unit_Thick"])
         writer = DictWriter(write_file, fieldnames=headers)
         writer.writeheader()
@@ -22,7 +22,7 @@ with open("data.csv") as csv_file:
                     writer.writerow(data[j])
                 bound = i
 
-    utils_func.export_to_csv("prepare_data_unit_by_unit.csv", utils_func.convert_unit_by_unit(data), headers)
+    utils_func.export_to_csv("../csv/prepare_data_unit_by_unit.csv", utils_func.convert_unit_by_unit(data), headers)
 
 
 

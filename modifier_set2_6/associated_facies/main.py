@@ -71,7 +71,7 @@ def simplify_data(data):
     lithos = []
 
     for i in range(len(data)):
-        if data[i]["Special_lithology"] != "-999":
+        if data[i]["Special_lithology"] != "-9999":
             lithos.append(int(data[i]["Special_lithology"]))
         if data[i]["Boundary_flag"] == "1":
             final_lithologies = deepcopy(utils_func.remove_duplicate(lithos))
@@ -310,13 +310,13 @@ def main(input_file, iter):
                 row.update(update_row(row, groups))
                 row.update({"Facies_group": tmp})
 
-        utils_func.export_to_csv(f"associated_facies{iter}.csv", simplified_data, headers)
+        utils_func.export_to_csv(f"../../csv/associated_facies{iter}.csv", simplified_data, headers)
 
 
 for i in range(0, 2):
     if i == 0:
-        main("../../modifier_set1_5/stacking_pattern/stacking_pattern.csv", i + 1)
+        main("../../csv/stacking_pattern.csv", i + 1)
     else:
-        main(f"upper_boundary{i}.csv", i + 1)
-    lower_boundary.main(f"associated_facies{i + 1}.csv", i + 1)
-    upper_boundary.main(f"lower_boundary{i + 1}.csv", i + 1)
+        main(f"../../csv/upper_boundary{i}.csv", i + 1)
+    lower_boundary.main(f"../../csv/associated_facies{i + 1}.csv", i + 1)
+    upper_boundary.main(f"../../csv/lower_boundary{i + 1}.csv", i + 1)
