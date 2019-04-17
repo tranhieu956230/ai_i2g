@@ -138,6 +138,27 @@ def contain_special_lithology(litho):
     return True
 
 
+def get_key(lst, i):
+    return [key for key in lst[i].keys()][0]
+
+
+def calculate_uncertainty(row):
+    if row["Most"] == "unknown":
+        print(1)
+        return 1
+
+    if row["Second_Most"] and row["Second_Most"] != "unknown" and float(row[row["Most"]]) - float(
+            row[row["Second_Most"]]) < 0.1:
+        print(2)
+        return 1
+
+    if row["Most"] and float(row[row["Most"]]) < 0.3:
+        print(3)
+        return 1
+
+    return 0
+
+
 def export_final(initial_file, filename, data, headers):
     if not headers:
         headers = data[0].keys()
@@ -145,6 +166,7 @@ def export_final(initial_file, filename, data, headers):
     keys = ["Most", "Second_Most", "Third_Most"]
 
     headers.append("Sum")
+    headers.append("Uncertainty_flag")
     headers.extend(keys)
 
     for row in data:
@@ -154,19 +176,25 @@ def export_final(initial_file, filename, data, headers):
                 lst.append({value: int(row[value])})
         lst = sorted(lst, key=lambda it: it[[key for key in it.keys()][0]], reverse=True)
         for i in range(len(lst) - 1):
-            if lst[i][[key for key in lst[i].keys()][0]] == lst[i + 1][[key for key in lst[i + 1].keys()][0]]:
-                lst[i][[key for key in lst[i].keys()][0]] = "unknown"
-                lst[i + 1][[key for key in lst[i + 1].keys()][0]] = "unknown"
+            if lst[i][get_key(lst, i)] == lst[i + 1][get_key(lst, i + 1)]:
+                lst[i][get_key(lst, i)] = "unknown"
+                lst[i + 1][get_key(lst, i + 1)] = "unknown"
 
-        for i in range(len(lst)):
+        for i in range(len(keys)):
             if len(lst) > i:
                 name = [key for key in lst[i].keys()][0]
                 if lst[i][name] == "unknown" or contain_special_lithology(row["Special_lithology"]):
                     row.update({keys[i]: "unknown"})
                 else:
                     row.update({keys[i]: name})
+            else:
+                row.update({keys[i]: ""})
+
             if i == 2:
                 break
+
+    for row in data:
+        row.update({"Uncertainty_flag": calculate_uncertainty(row)})
 
     for row in data:
         total = 0
@@ -176,10 +204,8 @@ def export_final(initial_file, filename, data, headers):
 
     for row in data:
         for key, value in code_to_name.items():
-            try:
+            if int(row["Sum"]) != 0:
                 row.update({value: int(row[value]) / int(row["Sum"])})
-            except ZeroDivisionError:
-                print(row["Unit_index"])
 
     with open(initial_file) as i_file:
         csv_reader = DictReader(i_file)
@@ -191,10 +217,7 @@ def export_final(initial_file, filename, data, headers):
         for row in initial_data:
             for header in headers:
                 if header not in row:
-                    try:
-                        row.update({header: data[int(row["Unit_index"])][header]})
-                    except KeyError:
-                        print(row["Unit_index"])
+                    row.update({header: data[int(row["Unit_index"])][header]})
             csv_writer.writerow(row)
 
 

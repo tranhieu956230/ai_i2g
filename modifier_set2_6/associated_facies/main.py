@@ -167,10 +167,6 @@ def update_most_abundant(row, group):
     if group["name"] == "Deep_Marine":
         points = [-2, -1, -2, -1, 0, 2]
 
-    if row["Unit_index"] == "219":
-        print("Most abundant")
-        for i in range(len(points)):
-            print(points[i])
 
     for i in range(len(points)):
         row.update(utils_func.update_row_group(GROUPS[i], row, points[i]))
@@ -198,11 +194,6 @@ def update_second_most_abundant(row, group):
     if group["name"] == "Deep_Marine":
         points = [-2, -2, -2, -1, 0, 1]
 
-    if row["Unit_index"] == "219":
-        print("second abundant")
-        for i in range(len(points)):
-            print(points[i])
-
     for i in range(len(points)):
         row.update(utils_func.update_row_group(GROUPS[i], row, points[i]))
 
@@ -229,10 +220,6 @@ def update_third_most_abundant(row, group):
     if group["name"] == "Deep_Marine":
         points = [-1, -1, -1, 0, 0, 0]
 
-    if row["Unit_index"] == "219":
-        print("third abundant")
-        for i in range(len(points)):
-            print(points[i])
 
     for i in range(len(points)):
         row.update(utils_func.update_row_group(GROUPS[i], row, points[i]))
@@ -260,10 +247,6 @@ def update_4_6_most_abundant(row, group):
     if group["name"] == "Deep_Marine":
         points = [0, 0, 0, 0, 0, -2]
 
-    if row["Unit_index"] == "219":
-        print("fourth")
-        for i in range(len(points)):
-            print(points[i])
 
     for i in range(len(points)):
         row.update(utils_func.update_row_group(GROUPS[i], row, points[i]))
