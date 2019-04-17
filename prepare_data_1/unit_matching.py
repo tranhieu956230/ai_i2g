@@ -6,7 +6,7 @@ import seaborn as sns
 sns.set()
 
 # Importing the dataset
-dataset = pd.read_csv('../csv/initial_data.csv')
+dataset = pd.read_csv('csv/initial_data.csv')
 
 gr = dataset.GR.values
 tvd = dataset.TVD.values
@@ -27,46 +27,6 @@ for i in range(n_samples):
         idx_set = []
 
 
-# # Visualization gr shape
-# n_demo_samples = 500
-# demo_start = 0
-#
-# colors = ['c', 'r', 'g', 'b', 'y', 'black']
-# str_labels = ['', 'FU', 'UN', 'SR', 'CU', 'Mud']
-#
-# fig, axes = plt.subplots(1, 6, figsize = (18, 15))
-#
-# idx_set = []
-# for j, ax in enumerate(axes):
-#     demo_start = j * n_demo_samples
-#     for i in range (demo_start, demo_start + n_demo_samples):
-#         idx_set.append(i)
-#         if boundary_flag[i] != 0:
-#             label = gr_shape_code[i]
-#             str_label = str_labels[label]
-#             if str_label in ax.get_legend_handles_labels()[1]:
-#                 str_label = ''
-#             ax.plot(gr[idx_set], idx_set, c = colors[label], label = str_label, linewidth = 1.2)
-#
-#             idx_set = [i]
-#
-#     for y in np.arange(demo_start, demo_start + n_demo_samples)[boundary_flag[demo_start: demo_start + n_demo_samples] != 0]:
-#         ax.axhline(y, c = 'black', linewidth = 0.5)
-#         ax.text(0, y, "{}".format(unit_index[y]), fontsize = 10)
-#
-#     ax.set_xlim([0, 150])
-#     ax.set_xlabel('GR')
-#     ax.set_ylabel('Sequence number of samples')
-#     ax.xaxis.tick_top()
-#     ax.xaxis.set_label_position('top')
-#     ax.invert_yaxis()
-#     ax.set_title('GR shape code')
-#
-#     ax.legend().set_draggable(True)
-# plt.tight_layout()
-# plt.show()
-
-# Rate of change
 def compute_rate_of_change(arr):
     n_samples = arr.shape[0]
     avg_first = np.average(arr[:2])
@@ -260,69 +220,6 @@ for i in range(len(similar_unit_list100)):
         if similar_unit_list100[i][j] > i:
             similar_unit_list100[similar_unit_list100[i][j]].append(i)
 
-# # Visualisation
-# n_demo_samples = 500
-# fig, axes = plt.subplots(1, 6, figsize = (18, 15))
-#
-# for i, ax in enumerate(axes):
-#     demo_start = 0 + i * n_demo_samples
-#     ax.plot(gr[demo_start: demo_start + n_demo_samples], np.arange(demo_start, demo_start + n_demo_samples))
-#
-#     for y in np.arange(demo_start, demo_start + n_demo_samples)[boundary_flag[demo_start: demo_start + n_demo_samples] != 0]:
-#         ax.axhline(y, c = 'black', linewidth = 0.5)
-#         ax.text(0, y, "{} {}".format(unit_index[y], similar_unit_list[unit_index[y]]), fontsize = 10)
-#
-#     ax.set_xlim([0, 150])
-#     ax.set_xlabel('GR')
-#     ax.set_ylabel('Sequence number of samples')
-#     ax.xaxis.tick_top()
-#     ax.xaxis.set_label_position('top')
-#     ax.invert_yaxis()
-#
-# plt.legend().set_draggable(True)
-# plt.tight_layout()
-# plt.show()
-#
-# # Visualization lithofacies
-# n_demo_samples = 500
-# demo_start = 0
-#
-# colors = ['c', 'r', 'g', 'b', 'y', 'black']
-# str_labels = ['', 'clean sandstone', 'muddy sandstone', 'sandy mudstone', 'Mudstone']
-#
-# fig, axes = plt.subplots(1, 4, figsize = (15, 15))
-#
-# idx_set = []
-# for j, ax in enumerate(axes):
-#     demo_start = 4000 + j * n_demo_samples
-#     for i in range (demo_start, demo_start + n_demo_samples):
-#         idx_set.append(i)
-#         if boundary_flag[i] != 0:
-#             label = lithofacies[i]
-#             str_label = str_labels[label]
-#             if str_label in ax.get_legend_handles_labels()[1]:
-#                 str_label = ''
-#             ax.plot(gr[idx_set], idx_set, c = colors[label], label = str_label, linewidth = 1.2)
-#
-#             idx_set = [i]
-#
-#     for y in np.arange(demo_start, demo_start + n_demo_samples)[boundary_flag[demo_start: demo_start + n_demo_samples] != 0]:
-#         ax.axhline(y, c = 'black', linewidth = 0.5)
-#         ax.text(0, y, "{} {}".format(unit_index[y], similar_unit_list[unit_index[y]]), fontsize = 10)
-#
-#     ax.set_xlim([0, 150])
-#     ax.set_xlabel('GR')
-#     ax.set_ylabel('Sequence number of samples')
-#     ax.xaxis.tick_top()
-#     ax.xaxis.set_label_position('top')
-#     ax.invert_yaxis()
-#     ax.set_title('Lithofacies')
-#
-# axes[0].legend().set_draggable(True)
-# plt.tight_layout()
-# plt.show()
-#
-# Save to files
 dataset['Unit_index'] = unit_index
 dataset['Number_of_similar_units_50'] = number_of_similar_pattern50
 dataset['Index_of_similar_units_50'] = ''
@@ -344,4 +241,4 @@ dataset = dataset[['Depth', 'GR', 'MUD_VOLUME', 'TVD', 'Boundary_flag', 'Unit_in
                    'Biostratigraphy', 'Reliability', 'Special_lithology', 'Core_depofacies', 'Lateral_proximity',
                    'Number_of_similar_units_50', 'Index_of_similar_units_50', 'Number_of_similar_units_100',
                    'Index_of_similar_units_100']]
-dataset.to_csv('../csv/data.csv', index=False)
+dataset.to_csv('csv/data.csv', index=False)

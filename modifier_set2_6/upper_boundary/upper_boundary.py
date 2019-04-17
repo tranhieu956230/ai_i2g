@@ -136,7 +136,7 @@ def update_row(row, group):
     return row
 
 
-def main(input_file, i):
+def upper_boundary(input_file, i):
     with open(input_file) as file:
         csv_reader = reader(file)
         headers = list(csv_reader)[0]
@@ -153,7 +153,7 @@ def main(input_file, i):
                 row.update(update_row(row, group))
                 row.update({"Facies_above": group["name"] if group else None})
 
-        utils_func.export_to_csv(f"../../csv/upper_boundary{i}.csv", data, headers)
+        utils_func.export_to_csv(f"csv/upper_boundary{i}.csv", data, headers)
 
         if i == 2:
-            utils_func.export_final("../../csv/prepare_data.csv", f"../../csv/final.csv", data, headers)
+            utils_func.export_final("csv/prepare_data.csv", f"csv/final.csv", data, headers)
