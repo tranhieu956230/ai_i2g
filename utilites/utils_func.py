@@ -144,16 +144,13 @@ def get_key(lst, i):
 
 def calculate_uncertainty(row):
     if row["Most"] == "unknown":
-        print(1)
         return 1
 
     if row["Second_Most"] and row["Second_Most"] != "unknown" and float(row[row["Most"]]) - float(
             row[row["Second_Most"]]) < 0.1:
-        print(2)
         return 1
 
     if row["Most"] and float(row[row["Most"]]) < 0.3:
-        print(3)
         return 1
 
     return 0

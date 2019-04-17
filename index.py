@@ -26,5 +26,8 @@ def main():
             associated_facies("csv/stacking_pattern.csv", i + 1)
         else:
             associated_facies(f"csv/upper_boundary{i}.csv", i + 1)
-        lower_boundary.main(f"csv/associated_facies{i + 1}.csv", i + 1)
-        upper_boundary.main(f"csv/lower_boundary{i + 1}.csv", i + 1)
+        lower_boundary(f"csv/associated_facies{i + 1}.csv", i + 1)
+        upper_boundary(f"csv/lower_boundary{i + 1}.csv", i + 1)
+
+
+main()
