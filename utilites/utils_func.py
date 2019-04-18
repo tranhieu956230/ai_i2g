@@ -50,6 +50,16 @@ groups = {
 }
 
 
+def convert_name_to_number(data):
+    tmp = deepcopy(code_to_name)
+    tmp.update({"0": "unknown"})
+    for row in data:
+        for key, value in row.items():
+            if value in tmp.values():
+                code = list(tmp.keys())[list(tmp.values()).index(value)]
+                row.update({key: code})
+
+
 def remove_duplicate(arr):
     arr.sort()
     i = 0
@@ -203,6 +213,8 @@ def export_final(initial_file, filename, data, headers):
         for key, value in code_to_name.items():
             if int(row["Sum"]) != 0:
                 row.update({value: int(row[value]) / int(row["Sum"])})
+
+    convert_name_to_number(data)
 
     with open(initial_file) as i_file:
         csv_reader = DictReader(i_file)
